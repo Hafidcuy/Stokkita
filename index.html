@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stokita - Sistem Inventaris Barang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- SPLASH -->
+  <section id="splash" class="screen splash-screen">
+    <div class="splash-logo">▣</div>
+    <h1>Stokita</h1>
+    <p>Sistem Inventaris Barang</p>
+    <small>Dibuat oleh :<br>Kelompok 1</small>
+    <div class="dots"><i></i><i></i><i></i><i></i><i></i></div>
+  </section>
+
+  <!-- AUTH -->
+  <section id="auth" class="screen auth-screen hidden">
+    <div class="auth-brand">
+      <h1>Stokita</h1>
+      <p>Kelola inventaris dengan mudah.</p>
+    </div>
+
+    <div class="auth-card">
+      <div class="tabs">
+        <button class="tab active" data-auth="login">Masuk</button>
+        <button class="tab" data-auth="register">Daftar Akun</button>
+      </div>
+
+      <form id="loginForm" class="auth-form">
+        <label>Email</label>
+        <input id="loginUser" type="email" placeholder="Email aktif" required>
+        <label>Password</label>
+        <input id="loginPass" type="password" placeholder="Password" required>
+        <button class="primary-btn" type="submit">Masuk</button>
+        <div class="divider">Atau masuk dengan</div>
+        <button id="googleLoginBtn" class="google-btn" type="button">🌈 Masuk dengan Google</button>
+        <p class="switch-text">Belum punya akun? <a href="#" data-switch="register">Daftar sekarang</a></p>
+      </form>
+
+      <form id="registerForm" class="auth-form hidden">
+        <label>Nama lengkap</label>
+        <input id="regName" type="text" placeholder="Nama lengkap" required>
+        <label>Masukkan alamat email</label>
+        <input id="regEmail" type="email" placeholder="Email aktif" required>
+        <label>Password</label>
+        <input id="regPass" type="password" placeholder="Password" required>
+        <label>Buat Username anda</label>
+        <input id="regUser" type="text" placeholder="Username" required>
+        <button class="primary-btn" type="submit">Daftar</button>
+        <div class="divider">Atau daftar dengan</div>
+        <button id="googleRegisterBtn" class="google-btn" type="button">🌈 Daftar dengan Google</button>
+        <p class="switch-text">Sudah punya akun? <a href="#" data-switch="login">Masuk sekarang</a></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- APP -->
+  <section id="app" class="app-shell hidden">
+    <header class="topbar">
+      <button id="menuBtn" class="icon-btn">☰</button>
+      <div class="brand-small">
+        <strong>Stokita</strong>
+        <span>Sistem Inventaris Barang</span>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn">🔔</button>
+        <div class="avatar">A</div>
+        <span>Admin</span>
+      </div>
+    </header>
+
+    <aside id="sidebar" class="sidebar">
+      <div class="side-logo">
+        <div class="mini-logo">▣</div>
+        <div><b>Stokita</b><small>Sistem Inventaris</small></div>
+      </div>
+      <nav>
+        <button class="nav-item active" data-page="dashboard">⌂ <span>Beranda</span></button>
+        <button class="nav-item" data-page="products">▦ <span>Barang</span></button>
+        <button class="nav-item" data-page="transactions">⇄ <span>Transaksi</span></button>
+        <button class="nav-item" data-page="settings">⚙ <span>Pengaturan</span></button>
+      </nav>
+      <div class="sheet-box">
+        <b>📊 Hubungkan Google Spreadsheet</b>
+        <p>Masukkan link spreadsheet untuk mengimpor data inventaris.</p>
+        <button id="sheetSidebarBtn">Atur Sekarang</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+
+      <!-- DASHBOARD -->
+      <div id="page-dashboard" class="page">
+        <div class="page-heading">
+          <div>
+            <h2>Selamat datang, Admin 👋</h2>
+            <p>Kelola inventaris barang dengan mudah.</p>
+          </div>
+          <button class="primary-btn small" id="addFromDash">+ Tambah Barang</button>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card"><span class="stat-icon blue">▣</span><div><small>Total Barang</small><b id="statTotal">0</b></div></div>
+          <div class="stat-card"><span class="stat-icon green">↓</span><div><small>Stok Tersedia</small><b id="statStock">0</b></div></div>
+          <div class="stat-card"><span class="stat-icon purple">!</span><div><small>Stok Menipis</small><b id="statLow">0</b></div></div>
+          <div class="stat-card"><span class="stat-icon red">×</span><div><small>Stok Habis</small><b id="statEmpty">0</b></div></div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-head"><h3>Barang Terbaru</h3><button class="text-btn" data-page="products">Lihat Semua →</button></div>
+            <div id="recentProducts" class="product-list"></div>
+          </div>
+
+          <div class="panel sheet-panel">
+            <div class="sheet-icon">▦</div>
+            <h3>Hubungkan Google Spreadsheet</h3>
+            <p>Masukkan link spreadsheet Anda untuk mengimpor dan menyinkronkan data inventaris.</p>
+            <input id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/...">
+            <div class="sheet-actions"><button id="connectSheet" class="primary-btn">🔗 Simpan Link</button><button id="importSheet" class="secondary-btn">⬇ Import Data</button></div>
+            <div id="sheetStatus" class="sheet-status">✓ Data dapat diimpor dari spreadsheet Anda<br>✓ Dapat diimpor ke sistem inventaris<br>✓ Sinkronisasi dapat dilakukan kapan saja</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRODUCTS -->
+      <div id="page-products" class="page hidden">
+        <div class="page-heading">
+          <div><h2>Daftar Barang</h2><p>Kelola semua data inventaris Anda.</p></div>
+          <button class="primary-btn" id="addProductBtn">+ Tambah Barang</button>
+        </div>
+        <div class="toolbar">
+          <input id="searchInput" placeholder="🔍 Cari barang, kode, atau kategori...">
+          <select id="categoryFilter"><option value="">Semua kategori</option></select>
+        </div>
+        <div class="panel">
+          <div id="allProducts" class="product-list"></div>
+        </div>
+      </div>
+
+      <!-- TRANSACTIONS -->
+      <div id="page-transactions" class="page hidden">
+        <div class="page-heading">
+          <div><h2>Transaksi</h2><p>Catatan stok masuk dan stok keluar.</p></div>
+          <button class="primary-btn" id="addTransactionBtn">+ Transaksi</button>
+        </div>
+        <div class="panel"><div id="transactionList"></div></div>
+      </div>
+
+      <!-- SETTINGS -->
+      <div id="page-settings" class="page hidden">
+        <div class="page-heading"><div><h2>Pengaturan</h2><p>Pengaturan akun dan koneksi aplikasi.</p></div></div>
+        <div class="panel settings-list">
+          <div class="setting-row"><span>👤</span><div><b id="profileName">Admin</b><small id="profileEmail">-</small></div><span>›</span></div>
+          <div class="setting-row"><span>📊</span><div><b>Google Spreadsheet</b><small id="settingsSheetStatus">Belum terhubung</small></div><span>›</span></div>
+          <div class="setting-row danger" id="logoutBtn"><span>↪</span><div><b>Keluar</b></div></div>
+        </div>
+      </div>
+    </main>
+  </section>
+
+  <!-- PRODUCT MODAL -->
+  <div id="productModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head"><h2 id="modalTitle">Tambah Barang</h2><button id="closeModal">×</button></div>
+      <form id="productForm">
+        <input type="hidden" id="editId">
+        <label>Foto Barang</label>
+        <input id="photo" type="file" accept="image/*">
+        <label>Kode Barang</label>
+        <input id="kode" required placeholder="Contoh: BRG001">
+        <label>Nama Barang</label>
+        <input id="nama" required placeholder="Nama barang">
+        <div class="two-col">
+          <div><label>Kategori</label><input id="kategori" required placeholder="Elektronik"></div>
+          <div><label>Harga</label><input id="harga" type="number" required placeholder="5000000"></div>
+        </div>
+        <div class="two-col">
+          <div><label>Stok</label><input id="stok" type="number" min="0" required placeholder="10"></div>
+          <div><label>Satuan</label><input id="satuan" required placeholder="Unit"></div>
+        </div>
+        <label>Supplier</label>
+        <input id="supplier" required placeholder="Nama supplier">
+        <label>Deskripsi</label>
+        <textarea id="deskripsi" placeholder="Deskripsi barang"></textarea>
+        <button class="primary-btn" type="submit">Simpan Barang</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- TRANSACTION MODAL -->
+  <div id="transactionModal" class="modal hidden">
+    <div class="modal-card">
+      <div class="modal-head"><h2>Transaksi Stok</h2><button id="closeTransaction">×</button></div>
+      <form id="transactionForm">
+        <label>Barang</label>
+        <select id="transactionProduct" required></select>
+        <div class="two-col">
+          <div><label>Jenis</label><select id="transactionType" required><option value="masuk">Stok Masuk</option><option value="keluar">Stok Keluar</option></select></div>
+          <div><label>Jumlah</label><input id="transactionQty" type="number" min="1" required placeholder="10"></div>
+        </div>
+        <label>Keterangan</label>
+        <textarea id="transactionNote" placeholder="Contoh: Pembelian dari supplier"></textarea>
+        <button class="primary-btn" type="submit">Simpan Transaksi</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DETAIL MODAL -->
+  <div id="detailModal" class="modal hidden">
+    <div class="modal-card detail-card">
+      <div class="modal-head"><h2>Detail Barang</h2><button id="closeDetail">×</button></div>
+      <div id="detailContent"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
