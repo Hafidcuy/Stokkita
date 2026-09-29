@@ -6,6 +6,7 @@ const sb = createClient(window.SUPABASE_URL, window.SUPABASE_KEY, {
 let products = [], transactions = [], currentUser = null, currentProfile = null;
 let lowStockThreshold = Math.max(1, Number(localStorage.getItem("stokita-low-stock")) || 3);
 const $ = id => document.getElementById(id);
+const paintIcons = () => { try { window.lucide && window.paintIcons(); } catch(e){} };
 const rupiah = n => new Intl.NumberFormat("id-ID", {style:"currency", currency:"IDR", maximumFractionDigits:0}).format(Number(n || 0));
 const esc = v => String(v ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 const status = n => Number(n) <= 0 ? ["Habis","empty"] : Number(n) <= lowStockThreshold ? ["Menipis","low"] : ["Aman","safe"];
@@ -94,14 +95,38 @@ function renderProducts(box, list, actions){
   if(!list.length){ box.innerHTML = '<div class="empty-state">Belum ada barang.</div>'; return; }
   box.innerHTML = list.map(p => {
     const [s,cl] = status(p.stok);
-    return `<div class="product-row"><div class="product-img">${p.image_url ? `<img src="${esc(p.image_url)}" style="width:44px;height:44px;object-fit:cover;border-radius:8px">` : "📦"}</div><div><b>${esc(p.nama)}</b><small>${esc(p.kode)}</small></div><div class="hide-mobile"><small>${esc(p.kategori)}</small></div><div><b>${p.stok}</b><small>${esc(p.satuan)}</small></div><div class="hide-mobile"><span class="status ${cl}">${s}</span></div><div class="row-actions">${actions ? `<button onclick="showDetail('${p.id}')">Lihat</button><button onclick="editProduct('${p.id}')">Edit</button><button onclick="deleteProduct('${p.id}')">Hapus</button>` : `<button onclick="showDetail('${p.id}')">→</button>`}</div></div>`;
+    const imgHtml = p.image_url 
+      ? `<img src="${esc(p.image_url)}" style="width:44px;height:44px;object-fit:cover;border-radius:8px">` 
+      : `<div class="product-icon-placeholder"><i data-lucide="package"></i></div>`;
+    
+    return `<div class="product-row">
+      <div class="product-img">${imgHtml}</div>
+      <div><b>${esc(p.nama)}</b><small>${esc(p.kode)}</small></div>
+      <div class="hide-mobile"><small>${esc(p.kategori)}</small></div>
+      <div><b>${p.stok}</b><small>${esc(p.satuan)}</small></div>
+      <div class="hide-mobile"><span class="status ${cl}">${s}</span></div>
+      <div class="row-actions">${actions 
+        ? `<button onclick="showDetail('${p.id}')"><i data-lucide="eye"></i></button><button onclick="editProduct('${p.id}')"><i data-lucide="edit"></i></button><button onclick="deleteProduct('${p.id}')"><i data-lucide="trash-2"></i></button>` 
+        : `<button onclick="showDetail('${p.id}')"><i data-lucide="chevron-right"></i></button>`}</div>
+    </div>`;
   }).join("");
+  paintIcons();
 }
 function renderTransactions(){
   const box = $("transactionList");
   if(!box) return;
   if(!transactions.length){ box.innerHTML = '<div class="empty-state">Belum ada transaksi.</div>'; return; }
-  box.innerHTML = transactions.map(t => `<div class="product-row transaction-row" style="grid-template-columns:45px 1fr 110px 1fr"><div class="product-img">${t.type === "masuk" ? "↓" : "↑"}</div><div><b>${esc(t.products?.nama || "Barang")}</b><small>${esc(t.products?.kode || "")}</small></div><div><span class="status ${t.type === "masuk" ? "safe" : "low"}">${t.type === "masuk" ? "Stok Masuk" : "Stok Keluar"}</span></div><div><b>${t.jumlah}</b><small>${esc(t.keterangan || "")} · ${new Date(t.created_at).toLocaleString("id-ID")}</small></div></div>`).join("");
+  box.innerHTML = transactions.map(t => {
+    const icon = t.type === "masuk" ? "download" : "upload";
+    const colorClass = t.type === "masuk" ? "safe" : "low";
+    return `<div class="product-row transaction-row" style="grid-template-columns:45px 1fr 110px 1fr">
+      <div class="product-img transaction-icon ${colorClass}"><i data-lucide="${icon}"></i></div>
+      <div><b>${esc(t.products?.nama || "Barang")}</b><small>${esc(t.products?.kode || "")}</small></div>
+      <div><span class="status ${colorClass}">${t.type === "masuk" ? "Stok Masuk" : "Stok Keluar"}</span></div>
+      <div><b>${t.jumlah}</b><small>${esc(t.keterangan || "")} · ${new Date(t.created_at).toLocaleString("id-ID")}</small></div>
+    </div>`;
+  }).join("");
+  paintIcons();
 }
 function go(page){
   document.querySelectorAll(".page").forEach(x => x.classList.add("hidden"));
@@ -142,8 +167,12 @@ async function deleteProduct(id){
 }
 function showDetail(id){
   const p = products.find(x => x.id === id); if(!p) return; const [s,cl] = status(p.stok);
-  $("detailContent").innerHTML = `<div class="detail-image">${p.image_url ? `<img src="${esc(p.image_url)}" style="max-width:100%;max-height:190px;border-radius:12px">` : "📦"}</div><div class="detail-title">${esc(p.nama)}</div><span class="status ${cl}">${s}</span><div class="detail-grid"><div class="detail-item"><small>Kode</small><b>${esc(p.kode)}</b></div><div class="detail-item"><small>Kategori</small><b>${esc(p.kategori)}</b></div><div class="detail-item"><small>Harga</small><b>${rupiah(p.harga)}</b></div><div class="detail-item"><small>Stok</small><b>${p.stok} ${esc(p.satuan)}</b></div><div class="detail-item"><small>Supplier</small><b>${esc(p.supplier)}</b></div></div><p style="font-size:11px;color:#66758d">${esc(p.deskripsi)}</p><button class="primary-btn" onclick="editProduct('${p.id}');$('detailModal').classList.add('hidden')">Edit</button> <button class="primary-btn" style="background:#e9364e" onclick="deleteProduct('${p.id}');$('detailModal').classList.add('hidden')">Hapus</button>`;
+  const imgContent = p.image_url 
+    ? `<img src="${esc(p.image_url)}" style="max-width:100%;max-height:190px;border-radius:12px">` 
+    : `<div class="detail-icon-placeholder"><i data-lucide="package"></i></div>`;
+  $("detailContent").innerHTML = `<div class="detail-image">${imgContent}</div><div class="detail-title">${esc(p.nama)}</div><span class="status ${cl}">${s}</span><div class="detail-grid"><div class="detail-item"><small>Kode</small><b>${esc(p.kode)}</b></div><div class="detail-item"><small>Kategori</small><b>${esc(p.kategori)}</b></div><div class="detail-item"><small>Harga</small><b>${rupiah(p.harga)}</b></div><div class="detail-item"><small>Stok</small><b>${p.stok} ${esc(p.satuan)}</b></div><div class="detail-item"><small>Supplier</small><b>${esc(p.supplier)}</b></div></div><p style="font-size:11px;color:#66758d">${esc(p.deskripsi)}</p><button class="primary-btn" onclick="editProduct('${p.id}');$('detailModal').classList.add('hidden')"><i data-lucide="edit"></i> Edit</button> <button class="primary-btn" style="background:#e9364e" onclick="deleteProduct('${p.id}');$('detailModal').classList.add('hidden')"><i data-lucide="trash-2"></i> Hapus</button>`;
   $("detailModal").classList.remove("hidden");
+  paintIcons();
 }
 function openTransactionModal(presetType){
   if(!products.length) return alert("Tambahkan barang terlebih dahulu.");
@@ -209,7 +238,8 @@ async function connectSheet(){
   const url=$("sheetUrl").value.trim();
   if(!url.includes("docs.google.com/spreadsheets")) return alert("Masukkan link Google Spreadsheet yang valid.");
   const {error}=await sb.from("profiles").update({spreadsheet_url:url}).eq("id",currentUser.id); if(error) throw error;
-  $("sheetStatus").innerHTML="✓ Link spreadsheet tersimpan di Supabase<br>✓ Tekan Import Data untuk membaca spreadsheet";
+  $("sheetStatus").innerHTML='<i data-lucide="check-circle"></i> Link spreadsheet tersimpan di Supabase<br><i data-lucide="check-circle"></i> Tekan Import Data untuk membaca spreadsheet';
+  paintIcons();
   $("settingsSheetStatus").textContent="Link tersimpan";
 }
 async function importSpreadsheet(){
@@ -224,7 +254,7 @@ async function importSpreadsheet(){
       text=t; break;
     }catch(e){ lastErr=e; }
   }
-  if(text===null){ $("sheetStatus").innerHTML="✕ Tidak bisa membaca spreadsheet. Pastikan spreadsheet dibagikan <b>Anyone with the link → Viewer</b>."; throw lastErr || new Error("Gagal membaca spreadsheet."); }
+  if(text===null){ $("sheetStatus").innerHTML='<i data-lucide="alert-circle"></i> Tidak bisa membaca spreadsheet. Pastikan spreadsheet dibagikan <b>Anyone with the link <i data-lucide="arrow-right"></i> Viewer</b>.'; paintIcons(); throw lastErr || new Error("Gagal membaca spreadsheet."); }
   const rows=csvToRows(text); if(rows.length<2) throw new Error("Spreadsheet kosong atau hanya memiliki header.");
   const headers=rows[0].map(normHeader);
   const aliases={kode:["kode","code","kodebarang","itemcode"],nama:["nama","name","namabarang","item","product"],kategori:["kategori","category"],harga:["harga","price","cost"],stok:["stok","stock","jumlah","quantity"],satuan:["satuan","unit"],supplier:["supplier","pemasok"],deskripsi:["deskripsi","description","keterangan"],image_url:["imageurl","foto","gambar","image"]};
@@ -237,7 +267,7 @@ async function importSpreadsheet(){
   }
   if(!imported.length) throw new Error("Tidak ada baris produk yang valid untuk diimpor.");
   const {error}=await sb.from("products").upsert(imported,{onConflict:"user_id,kode"}); if(error) throw error;
-  await loadData(); $("sheetStatus").innerHTML=`✓ Berhasil mengimpor <b>${imported.length}</b> produk ke Supabase.`;
+  await loadData(); $("sheetStatus").innerHTML=`<i data-lucide="check-circle"></i> Berhasil mengimpor <b>${imported.length}</b> produk ke Supabase.`; paintIcons();
 }
 async function googleAuth(){
   const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{queryParams:{access_type:"offline",prompt:"consent"},scopes:"https://www.googleapis.com/auth/spreadsheets.readonly"}});

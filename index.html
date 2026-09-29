@@ -15,6 +15,7 @@
       document.documentElement.setAttribute("data-theme", resolved);
     })();
   </script>
+  <script src="lucide.js"></script>
 </head>
 <body>
 
@@ -71,14 +72,14 @@
   <!-- APP -->
   <section id="app" class="app-shell hidden">
     <header class="topbar">
-      <button id="menuBtn" class="icon-btn">☰</button>
+      <button id="menuBtn" class="icon-btn"><i data-lucide="menu"></i></button>
       <div class="brand-small">
         <strong>Stokita</strong>
         <span>Sistem Inventaris Barang</span>
       </div>
       <div class="top-actions">
         <div class="notif-wrap">
-          <button class="icon-btn" id="notifBtn">🔔<span id="notifBadge" class="notif-badge hidden">0</span></button>
+          <button class="icon-btn" id="notifBtn"><i data-lucide="bell"></i><span id="notifBadge" class="notif-badge hidden">0</span></button>
           <div id="notifPanel" class="notif-panel hidden">
             <b class="notif-title">Peringatan Stok</b>
             <div id="notifList"></div>
@@ -91,17 +92,17 @@
 
     <aside id="sidebar" class="sidebar">
       <div class="side-logo">
-        <div class="mini-logo">▣</div>
+        <div class="mini-logo"><i data-lucide="boxes"></i></div>
         <div><b>Stokita</b><small>Sistem Inventaris</small></div>
       </div>
       <nav>
-        <button class="nav-item active" data-page="dashboard">⌂ <span>Beranda</span></button>
-        <button class="nav-item" data-page="products">▦ <span>Barang</span></button>
-        <button class="nav-item" data-page="transactions">⇄ <span>Transaksi</span></button>
-        <button class="nav-item" data-page="settings">⚙ <span>Pengaturan</span></button>
+        <button class="nav-item active" data-page="dashboard"><i data-lucide="layout-dashboard"></i> <span>Beranda</span></button>
+        <button class="nav-item" data-page="products"><i data-lucide="package"></i> <span>Barang</span></button>
+        <button class="nav-item" data-page="transactions"><i data-lucide="arrow-left-right"></i> <span>Transaksi</span></button>
+        <button class="nav-item" data-page="settings"><i data-lucide="settings"></i> <span>Pengaturan</span></button>
       </nav>
       <div class="sheet-box">
-        <b>📊 Hubungkan Google Spreadsheet</b>
+        <b><i data-lucide="file-spreadsheet"></i> Hubungkan Google Spreadsheet</b>
         <p>Masukkan link spreadsheet untuk mengimpor data inventaris.</p>
         <button id="sheetSidebarBtn">Atur Sekarang</button>
       </div>
@@ -116,31 +117,51 @@
             <h2>Selamat datang, <span class="user-name">User</span>.</h2>
             <p>Kelola inventaris Stokita dengan lebih mudah.</p>
           </div>
-          <button class="primary-btn small" id="addFromDash">+ Tambah Barang</button>
+          <button class="primary-btn small" id="addFromDash"><i data-lucide="plus"></i> Tambah Barang</button>
         </div>
 
         <div class="stats-grid">
-          <div class="stat-card"><b id="statTotal">0</b><small>Total Produk</small></div>
-          <div class="stat-card"><b id="statStock">0</b><small>Total Stok</small></div>
-          <div class="stat-card"><b id="statEmpty">0</b><small>Stok Habis</small></div>
-          <div class="stat-card"><b id="statLow">0</b><small>Stok Menipis</small></div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon-wrapper blue"><i data-lucide="package"></i></span>
+            </div>
+            <b id="statTotal">0</b><small>Total Produk</small>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon-wrapper green"><i data-lucide="layers"></i></span>
+            </div>
+            <b id="statStock">0</b><small>Total Stok</small>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon-wrapper red"><i data-lucide="alert-octagon"></i></span>
+            </div>
+            <b id="statEmpty">0</b><small>Stok Habis</small>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon-wrapper amber"><i data-lucide="alert-triangle"></i></span>
+            </div>
+            <b id="statLow">0</b><small>Stok Menipis</small>
+          </div>
         </div>
 
         <div class="quick-access">
           <h3 class="quick-access-title">Akses Cepat.</h3>
           <div class="quick-access-grid">
             <button type="button" class="quick-access-box" id="qaAddProduct">
-              <span class="qa-icon">➕</span>
+              <span class="qa-icon"><i data-lucide="package-plus"></i></span>
               <b>Tambah Produk</b>
               <small>Input barang baru</small>
             </button>
             <button type="button" class="quick-access-box" id="qaStockIn">
-              <span class="qa-icon">↓</span>
+              <span class="qa-icon"><i data-lucide="download"></i></span>
               <b>Stok Masuk</b>
               <small>Catat barang masuk</small>
             </button>
             <button type="button" class="quick-access-box" id="qaStockOut">
-              <span class="qa-icon">↑</span>
+              <span class="qa-icon"><i data-lucide="upload"></i></span>
               <b>Stok Keluar</b>
               <small>Catat barang keluar</small>
             </button>
@@ -149,17 +170,17 @@
 
         <div class="dashboard-grid">
           <div class="panel">
-            <div class="panel-head"><h3>Barang Terbaru</h3><button class="text-btn" data-page="products">Lihat Semua →</button></div>
+            <div class="panel-head"><h3>Barang Terbaru</h3><button class="text-btn" data-page="products">Lihat Semua <i data-lucide="arrow-right"></i></button></div>
             <div id="recentProducts" class="product-list"></div>
           </div>
 
           <div class="panel sheet-panel">
-            <div class="sheet-icon">▦</div>
+            <div class="sheet-icon"><i data-lucide="file-spreadsheet"></i></div>
             <h3>Hubungkan Google Spreadsheet</h3>
             <p>Masukkan link spreadsheet Anda untuk mengimpor data inventaris.</p>
             <input id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/...">
-            <div class="sheet-actions"><button id="connectSheet" class="primary-btn">🔗 Simpan Link</button><button id="importSheet" class="secondary-btn">⬇ Import Data</button></div>
-            <div id="sheetStatus" class="sheet-status">✓ Data dapat diimpor dari spreadsheet Anda<br>✓ Dapat diimpor ke sistem inventaris<br>✓ Data dapat diimpor ulang kapan saja</div>
+            <div class="sheet-actions"><button id="connectSheet" class="primary-btn"><i data-lucide="link"></i> Simpan Link</button><button id="importSheet" class="secondary-btn"><i data-lucide="download"></i> Import Data</button></div>
+            <div id="sheetStatus" class="sheet-status"><i data-lucide="check-circle"></i> Data dapat diimpor dari spreadsheet Anda<br><i data-lucide="check-circle"></i> Dapat diimpor ke sistem inventaris<br><i data-lucide="check-circle"></i> Data dapat diimpor ulang kapan saja</div>
           </div>
         </div>
       </div>
@@ -168,12 +189,15 @@
       <div id="page-products" class="page hidden">
         <div class="page-heading">
           <div><h2>Daftar Barang</h2><p>Kelola semua data inventaris Anda.</p></div>
-          <button class="primary-btn" id="addProductBtn">+ Tambah Barang</button>
+          <button class="primary-btn" id="addProductBtn"><i data-lucide="plus"></i> Tambah Barang</button>
         </div>
         <div class="toolbar">
-          <input id="searchInput" placeholder="🔍 Cari barang, kode, atau kategori...">
+          <div class="search-box">
+            <i data-lucide="search" class="search-icon"></i>
+            <input id="searchInput" placeholder="Cari barang, kode, atau kategori...">
+          </div>
           <select id="categoryFilter"><option value="">Semua kategori</option></select>
-          <button id="exportCsvBtn" class="secondary-btn" type="button">⬇ Export CSV</button>
+          <button id="exportCsvBtn" class="secondary-btn" type="button"><i data-lucide="file-down"></i> Export CSV</button>
         </div>
         <div class="panel">
           <div id="allProducts" class="product-list"></div>
@@ -184,7 +208,7 @@
       <div id="page-transactions" class="page hidden">
         <div class="page-heading">
           <div><h2>Transaksi</h2><p>Catatan stok masuk dan stok keluar.</p></div>
-          <button class="primary-btn" id="addTransactionBtn">+ Transaksi</button>
+          <button class="primary-btn" id="addTransactionBtn"><i data-lucide="plus"></i> Transaksi</button>
         </div>
         <div class="panel"><div id="transactionList"></div></div>
       </div>
@@ -195,29 +219,29 @@
 
         <h4 class="settings-group-title">Akun</h4>
         <div class="panel settings-list">
-          <div class="setting-row" id="profileRow"><span>👤</span><div><b id="profileName">Admin</b><small id="profileEmail">-</small></div><span>›</span></div>
-          <div class="setting-row" id="passwordRow"><span>🔒</span><div><b>Ubah Password</b><small>Perbarui kata sandi akun Anda</small></div><span>›</span></div>
-          <div class="setting-row" id="sheetSettingRow"><span>📊</span><div><b>Google Spreadsheet</b><small id="settingsSheetStatus">Belum terhubung</small></div><span>›</span></div>
+          <div class="setting-row" id="profileRow"><span class="setting-icon"><i data-lucide="user"></i></span><div><b id="profileName">Admin</b><small id="profileEmail">-</small></div><i data-lucide="chevron-right"></i></div>
+          <div class="setting-row" id="passwordRow"><span class="setting-icon"><i data-lucide="lock"></i></span><div><b>Ubah Password</b><small>Perbarui kata sandi akun Anda</small></div><i data-lucide="chevron-right"></i></div>
+          <div class="setting-row" id="sheetSettingRow"><span class="setting-icon"><i data-lucide="file-spreadsheet"></i></span><div><b>Google Spreadsheet</b><small id="settingsSheetStatus">Belum terhubung</small></div><i data-lucide="chevron-right"></i></div>
         </div>
 
         <h4 class="settings-group-title">Tampilan</h4>
         <div class="panel">
           <div class="theme-switch">
-            <button type="button" class="theme-option" data-theme="light">☀ Terang</button>
-            <button type="button" class="theme-option" data-theme="dark">🌙 Gelap</button>
-            <button type="button" class="theme-option" data-theme="system">🖥 Sistem</button>
+            <button type="button" class="theme-option" data-theme="light"><i data-lucide="sun"></i> Terang</button>
+            <button type="button" class="theme-option" data-theme="dark"><i data-lucide="moon"></i> Gelap</button>
+            <button type="button" class="theme-option" data-theme="system"><i data-lucide="monitor"></i> Sistem</button>
           </div>
         </div>
 
         <h4 class="settings-group-title">Preferensi</h4>
         <div class="panel settings-list">
-          <div class="setting-row" style="cursor:default"><span>📉</span><div><b>Batas Stok Menipis</b><small>Tandai barang "Menipis" jika stok ≤ nilai ini</small></div><input id="lowStockThreshold" type="number" min="1" step="1"></div>
+          <div class="setting-row" style="cursor:default"><span class="setting-icon"><i data-lucide="trending-down"></i></span><div><b>Batas Stok Menipis</b><small>Tandai barang "Menipis" jika stok ≤ nilai ini</small></div><input id="lowStockThreshold" type="number" min="1" step="1"></div>
         </div>
 
         <h4 class="settings-group-title">Lainnya</h4>
         <div class="panel settings-list">
-          <div class="setting-row" style="cursor:default"><span>ℹ️</span><div><b>Tentang Aplikasi</b><small>Stokita v1.0 · Sistem Inventaris Barang · Kelompok 1</small></div></div>
-          <div class="setting-row danger" id="logoutBtn"><span>↪</span><div><b>Keluar</b></div></div>
+          <div class="setting-row" style="cursor:default"><span class="setting-icon"><i data-lucide="info"></i></span><div><b>Tentang Aplikasi</b><small>Stokita v1.0 · Sistem Inventaris Barang · Kelompok 1</small></div></div>
+          <div class="setting-row danger" id="logoutBtn"><span class="setting-icon"><i data-lucide="log-out"></i></span><div><b>Keluar</b></div></div>
         </div>
       </div>
     </main>
@@ -226,7 +250,7 @@
   <!-- PRODUCT MODAL -->
   <div id="productModal" class="modal hidden">
     <div class="modal-card">
-      <div class="modal-head"><h2 id="modalTitle">Tambah Barang</h2><button id="closeModal">×</button></div>
+      <div class="modal-head"><h2 id="modalTitle">Tambah Barang</h2><button id="closeModal"><i data-lucide="x"></i></button></div>
       <form id="productForm">
         <input type="hidden" id="editId">
         <label>Foto Barang</label>
@@ -255,7 +279,7 @@
   <!-- PROFILE MODAL -->
   <div id="profileModal" class="modal hidden">
     <div class="modal-card">
-      <div class="modal-head"><h2>Edit Profil</h2><button id="closeProfileModal">×</button></div>
+      <div class="modal-head"><h2>Edit Profil</h2><button id="closeProfileModal"><i data-lucide="x"></i></button></div>
       <form id="profileForm">
         <label>Nama lengkap</label>
         <input id="profileFullName" required placeholder="Nama lengkap">
@@ -269,7 +293,7 @@
   <!-- PASSWORD MODAL -->
   <div id="passwordModal" class="modal hidden">
     <div class="modal-card">
-      <div class="modal-head"><h2>Ubah Password</h2><button id="closePasswordModal">×</button></div>
+      <div class="modal-head"><h2>Ubah Password</h2><button id="closePasswordModal"><i data-lucide="x"></i></button></div>
       <form id="passwordForm">
         <label>Password baru</label>
         <input id="newPassword" type="password" minlength="6" required placeholder="Minimal 6 karakter">
@@ -283,7 +307,7 @@
   <!-- TRANSACTION MODAL -->
   <div id="transactionModal" class="modal hidden">
     <div class="modal-card">
-      <div class="modal-head"><h2>Transaksi Stok</h2><button id="closeTransaction">×</button></div>
+      <div class="modal-head"><h2>Transaksi Stok</h2><button id="closeTransaction"><i data-lucide="x"></i></button></div>
       <form id="transactionForm">
         <label>Barang</label>
         <select id="transactionProduct" required></select>
@@ -301,7 +325,7 @@
   <!-- DETAIL MODAL -->
   <div id="detailModal" class="modal hidden">
     <div class="modal-card detail-card">
-      <div class="modal-head"><h2>Detail Barang</h2><button id="closeDetail">×</button></div>
+      <div class="modal-head"><h2>Detail Barang</h2><button id="closeDetail"><i data-lucide="x"></i></button></div>
       <div id="detailContent"></div>
     </div>
   </div>
@@ -309,5 +333,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="app.js"></script>
+<script>try{window.lucide&&lucide.createIcons()}catch(e){}</script>
 </body>
 </html>
