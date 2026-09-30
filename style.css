@@ -154,3 +154,10 @@ svg.lucide{stroke-width:2;flex:none}
   [data-theme="dark"] .bottom-nav{background:#141d2b;border-top-color:#232f42}
   .main-content{padding-bottom:78px;padding-bottom:calc(78px + env(safe-area-inset-bottom))}
 }
+
+@media(max-width:600px){
+  /* Baris produk: tombol aksi jadi satu baris penuh di bawah (tidak melipat vertikal) */
+  .product-row .row-actions{display:flex;grid-column:1/-1;justify-content:flex-end;align-items:center;gap:6px}
+  .product-row .row-actions button{padding:8px 10px}
+  .product-row .row-actions button .lucide{width:17px;height:17px}
+}
