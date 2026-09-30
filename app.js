@@ -339,7 +339,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("googleRegisterBtn")?.addEventListener("click",()=>googleAuth().catch(fail));
   document.querySelectorAll(".nav-item").forEach(x=>x.addEventListener("click",()=>go(x.dataset.page)));
   document.querySelectorAll(".text-btn").forEach(x=>x.addEventListener("click",()=>go(x.dataset.page)));
-  $("menuBtn").addEventListener("click",()=>$("sidebar").classList.toggle("open"));
   $("addProductBtn").addEventListener("click",()=>openProductModal()); $("addFromDash").addEventListener("click",()=>openProductModal()); $("addTransactionBtn").addEventListener("click",()=>openTransactionModal());
   $("qaAddProduct").addEventListener("click",()=>openProductModal()); $("qaStockIn").addEventListener("click",()=>openTransactionModal("masuk")); $("qaStockOut").addEventListener("click",()=>openTransactionModal("keluar"));
   applyTheme(themePref);
