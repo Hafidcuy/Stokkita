@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <!-- PWA -->
   <link rel="manifest" href="./manifest.json">
-  <meta name="theme-color" content="#1D4ED8">
+  <meta name="theme-color" content="#312E81">
   <link rel="icon" type="image/png" href="./icon-192.png">
   <link rel="apple-touch-icon" href="./apple-touch-icon.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,14 +17,50 @@
   <link rel="stylesheet" href="style.css">
   <script>
     (function(){
-      var pref = localStorage.getItem("stokita-theme") || "system";
+      var pref = localStorage.getItem("stokita-theme") || "dark";
       var resolved = pref === "system" ? (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : pref;
       document.documentElement.setAttribute("data-theme", resolved);
     })();
   </script>
-  <script src="lucide.js"></script>
 </head>
 <body>
+
+  <!-- Ikon SVG inline (tanpa library eksternal) -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol>
+    <symbol id="i-layout-dashboard" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></symbol>
+    <symbol id="i-package" viewBox="0 0 24 24"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 6.96 12 12.01 20.71 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></symbol>
+    <symbol id="i-arrow-left-right" viewBox="0 0 24 24"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-file-spreadsheet" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M8 13h2"/><path d="M8 17h2"/><path d="M14 13h2"/><path d="M14 17h2"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+    <symbol id="i-alert-octagon" viewBox="0 0 24 24"><path d="M7.86 2h8.28L22 7.86v8.28L16.14 22H7.86L2 16.14V7.86z"/><path d="M12 8v4"/><path d="M12 16h.01"/></symbol>
+    <symbol id="i-alert-triangle" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3z"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-package-plus" viewBox="0 0 24 24"><g transform="translate(-2 1.5) scale(0.92)"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 6.96 12 12.01 20.71 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></g><path d="M17 7h5"/><path d="M19.5 4.5v5"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><path d="M12 15V3"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><path d="M12 3v12"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
+    <symbol id="i-check-circle" viewBox="0 0 24 24"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></symbol>
+    <symbol id="i-alert-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-file-down" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></symbol>
+    <symbol id="i-trending-down" viewBox="0 0 24 24"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></symbol>
+    <symbol id="i-barcode" viewBox="0 0 24 24"><path d="M3 5v14"/><path d="M8 5v14"/><path d="M12 5v14"/><path d="M17 5v14"/><path d="M21 5v14"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+    <symbol id="i-log-out" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><path d="M21 12H9"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></symbol>
+    <symbol id="i-trash-2" viewBox="0 0 24 24"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/></symbol>
+  </svg>
 
   <!-- SPLASH -->
   <section id="splash" class="screen splash-screen">
@@ -44,9 +80,11 @@
     </div>
 
     <div class="auth-card">
+      <input class="sr-tab" type="radio" name="authTab" id="tab-login" checked>
+      <input class="sr-tab" type="radio" name="authTab" id="tab-register">
       <div class="tabs">
-        <button class="tab active" data-auth="login">Masuk</button>
-        <button class="tab" data-auth="register">Daftar Akun</button>
+        <label class="tab" data-auth="login" for="tab-login">Masuk</label>
+        <label class="tab" data-auth="register" for="tab-register">Daftar Akun</label>
       </div>
 
       <form id="loginForm" class="auth-form">
@@ -57,10 +95,10 @@
         <button class="primary-btn" type="submit">Masuk</button>
         <div class="divider">Atau masuk dengan</div>
         <button id="googleLoginBtn" class="google-btn" type="button"><svg class="google-icon" viewBox="0 0 48 48" width="18" height="18" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l6-6C34.6 5.1 29.6 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.4-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.1 18.9 12 24 12c3.1 0 5.8 1.1 8 3l6-6C34.6 5.1 29.6 3 24 3c-7.7 0-14.3 4.3-17.7 10.7z"/><path fill="#4CAF50" d="M24 45c5.5 0 10.4-1.8 14.3-4.9l-6.6-5.4C29.7 36.5 27 37.5 24 37.5c-5.3 0-9.7-3.4-11.3-8.1l-6.6 5C9.6 40.6 16.2 45 24 45z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.6 5.4C41.5 36.1 45 30.8 45 24c0-1.4-.1-2.7-.4-3.5z"/></svg><span>Masuk dengan Google</span></button>
-        <p class="switch-text">Belum punya akun? <a href="#" data-switch="register">Daftar sekarang</a></p>
+        <p class="switch-text">Belum punya akun? <label class="link-label" data-switch="register" for="tab-register">Daftar sekarang</label></p>
       </form>
 
-      <form id="registerForm" class="auth-form hidden">
+      <form id="registerForm" class="auth-form">
         <label>Nama lengkap</label>
         <input id="regName" type="text" placeholder="Nama lengkap" required>
         <label>Masukkan alamat email</label>
@@ -72,7 +110,7 @@
         <button class="primary-btn" type="submit">Daftar</button>
         <div class="divider">Atau daftar dengan</div>
         <button id="googleRegisterBtn" class="google-btn" type="button"><svg class="google-icon" viewBox="0 0 48 48" width="18" height="18" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.9 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 8 3l6-6C34.6 5.1 29.6 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21 21-9.4 21-21c0-1.4-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.1 18.9 12 24 12c3.1 0 5.8 1.1 8 3l6-6C34.6 5.1 29.6 3 24 3c-7.7 0-14.3 4.3-17.7 10.7z"/><path fill="#4CAF50" d="M24 45c5.5 0 10.4-1.8 14.3-4.9l-6.6-5.4C29.7 36.5 27 37.5 24 37.5c-5.3 0-9.7-3.4-11.3-8.1l-6.6 5C9.6 40.6 16.2 45 24 45z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.2 5.7l6.6 5.4C41.5 36.1 45 30.8 45 24c0-1.4-.1-2.7-.4-3.5z"/></svg><span>Daftar dengan Google</span></button>
-        <p class="switch-text">Sudah punya akun? <a href="#" data-switch="login">Masuk sekarang</a></p>
+        <p class="switch-text">Sudah punya akun? <label class="link-label" data-switch="login" for="tab-login">Masuk sekarang</label></p>
       </form>
     </div>
   </section>
@@ -86,7 +124,7 @@
       </div>
       <div class="top-actions">
         <div class="notif-wrap">
-          <button class="icon-btn" id="notifBtn"><i data-lucide="bell"></i><span id="notifBadge" class="notif-badge hidden">0</span></button>
+          <button class="icon-btn" id="notifBtn" aria-label="Notifikasi"><svg class="ic"><use href="#i-bell"/></svg><span id="notifBadge" class="notif-badge hidden">0</span></button>
           <div id="notifPanel" class="notif-panel hidden">
             <b class="notif-title">Peringatan Stok</b>
             <div id="notifList"></div>
@@ -103,13 +141,13 @@
         <div><b>Stokita</b><small>Sistem Inventaris</small></div>
       </div>
       <nav>
-        <button class="nav-item active" data-page="dashboard"><i data-lucide="layout-dashboard"></i> <span>Beranda</span></button>
-        <button class="nav-item" data-page="products"><i data-lucide="package"></i> <span>Barang</span></button>
-        <button class="nav-item" data-page="transactions"><i data-lucide="arrow-left-right"></i> <span>Transaksi</span></button>
-        <button class="nav-item" data-page="settings"><i data-lucide="settings"></i> <span>Pengaturan</span></button>
+        <button class="nav-item active" data-page="dashboard"><svg class="ic"><use href="#i-layout-dashboard"/></svg> <span>Beranda</span></button>
+        <button class="nav-item" data-page="products"><svg class="ic"><use href="#i-package"/></svg> <span>Barang</span></button>
+        <button class="nav-item" data-page="transactions"><svg class="ic"><use href="#i-arrow-left-right"/></svg> <span>Transaksi</span></button>
+        <button class="nav-item" data-page="settings"><svg class="ic"><use href="#i-settings"/></svg> <span>Pengaturan</span></button>
       </nav>
       <div class="sheet-box">
-        <b><i data-lucide="file-spreadsheet"></i> Hubungkan Google Spreadsheet</b>
+        <b><svg class="ic"><use href="#i-file-spreadsheet"/></svg> Hubungkan Google Spreadsheet</b>
         <p>Masukkan link spreadsheet untuk mengimpor data inventaris.</p>
         <button id="sheetSidebarBtn">Atur Sekarang</button>
       </div>
@@ -124,31 +162,31 @@
             <h2>Selamat datang, <span class="user-name">User</span>.</h2>
             <p>Kelola inventaris Stokita dengan lebih mudah.</p>
           </div>
-          <button class="primary-btn small accent" id="addFromDash"><i data-lucide="plus"></i> Tambah Barang</button>
+          <button class="primary-btn small accent" id="addFromDash"><svg class="ic"><use href="#i-plus"/></svg> Tambah Barang</button>
         </div>
 
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-header">
-              <span class="stat-icon-wrapper blue"><i data-lucide="package"></i></span>
+              <span class="stat-icon-wrapper blue"><svg class="ic"><use href="#i-package"/></svg></span>
             </div>
             <b id="statTotal">0</b><small>Total Produk</small>
           </div>
           <div class="stat-card">
             <div class="stat-header">
-              <span class="stat-icon-wrapper green"><i data-lucide="layers"></i></span>
+              <span class="stat-icon-wrapper green"><svg class="ic"><use href="#i-layers"/></svg></span>
             </div>
             <b id="statStock">0</b><small>Total Stok</small>
           </div>
           <div class="stat-card">
             <div class="stat-header">
-              <span class="stat-icon-wrapper red"><i data-lucide="alert-octagon"></i></span>
+              <span class="stat-icon-wrapper red"><svg class="ic"><use href="#i-alert-octagon"/></svg></span>
             </div>
             <b id="statEmpty">0</b><small>Stok Habis</small>
           </div>
           <div class="stat-card">
             <div class="stat-header">
-              <span class="stat-icon-wrapper amber"><i data-lucide="alert-triangle"></i></span>
+              <span class="stat-icon-wrapper amber"><svg class="ic"><use href="#i-alert-triangle"/></svg></span>
             </div>
             <b id="statLow">0</b><small>Stok Menipis</small>
           </div>
@@ -158,17 +196,17 @@
           <h3 class="quick-access-title">Akses Cepat.</h3>
           <div class="quick-access-grid">
             <button type="button" class="quick-access-box" id="qaAddProduct">
-              <span class="qa-icon"><i data-lucide="package-plus"></i></span>
+              <span class="qa-icon"><svg class="ic"><use href="#i-package-plus"/></svg></span>
               <b>Tambah Produk</b>
               <small>Input barang baru</small>
             </button>
             <button type="button" class="quick-access-box" id="qaStockIn">
-              <span class="qa-icon"><i data-lucide="download"></i></span>
+              <span class="qa-icon"><svg class="ic"><use href="#i-download"/></svg></span>
               <b>Stok Masuk</b>
               <small>Catat barang masuk</small>
             </button>
             <button type="button" class="quick-access-box" id="qaStockOut">
-              <span class="qa-icon"><i data-lucide="upload"></i></span>
+              <span class="qa-icon"><svg class="ic"><use href="#i-upload"/></svg></span>
               <b>Stok Keluar</b>
               <small>Catat barang keluar</small>
             </button>
@@ -177,17 +215,17 @@
 
         <div class="dashboard-grid">
           <div class="panel">
-            <div class="panel-head"><h3>Barang Terbaru</h3><button class="text-btn" data-page="products">Lihat Semua <i data-lucide="arrow-right"></i></button></div>
+            <div class="panel-head"><h3>Barang Terbaru</h3><button class="text-btn" data-page="products">Lihat Semua <svg class="ic"><use href="#i-arrow-right"/></svg></button></div>
             <div id="recentProducts" class="product-list"></div>
           </div>
 
           <div class="panel sheet-panel">
-            <div class="sheet-icon"><i data-lucide="file-spreadsheet"></i></div>
+            <div class="sheet-icon"><svg class="ic"><use href="#i-file-spreadsheet"/></svg></div>
             <h3>Hubungkan Google Spreadsheet</h3>
             <p>Masukkan link spreadsheet Anda untuk mengimpor data inventaris.</p>
             <input id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/...">
-            <div class="sheet-actions"><button id="connectSheet" class="primary-btn"><i data-lucide="link"></i> Simpan Link</button><button id="importSheet" class="secondary-btn"><i data-lucide="download"></i> Import Data</button></div>
-            <div id="sheetStatus" class="sheet-status"><i data-lucide="check-circle"></i> Data dapat diimpor dari spreadsheet Anda<br><i data-lucide="check-circle"></i> Dapat diimpor ke sistem inventaris<br><i data-lucide="check-circle"></i> Data dapat diimpor ulang kapan saja</div>
+            <div class="sheet-actions"><button id="connectSheet" class="primary-btn"><svg class="ic"><use href="#i-link"/></svg> Simpan Link</button><button id="importSheet" class="secondary-btn"><svg class="ic"><use href="#i-download"/></svg> Import Data</button></div>
+            <div id="sheetStatus" class="sheet-status"><svg class="ic"><use href="#i-check-circle"/></svg> Data dapat diimpor dari spreadsheet Anda<br><svg class="ic"><use href="#i-check-circle"/></svg> Dapat diimpor ke sistem inventaris<br><svg class="ic"><use href="#i-check-circle"/></svg> Data dapat diimpor ulang kapan saja</div>
           </div>
         </div>
       </div>
@@ -196,15 +234,15 @@
       <div id="page-products" class="page hidden">
         <div class="page-heading">
           <div><h2>Daftar Barang</h2><p>Kelola semua data inventaris Anda.</p></div>
-          <button class="primary-btn accent" id="addProductBtn"><i data-lucide="plus"></i> Tambah Barang</button>
+          <button class="primary-btn accent" id="addProductBtn"><svg class="ic"><use href="#i-plus"/></svg> Tambah Barang</button>
         </div>
         <div class="toolbar">
           <div class="search-box">
-            <i data-lucide="search" class="search-icon"></i>
+            <span class="search-icon"><svg class="ic"><use href="#i-search"/></svg></span>
             <input id="searchInput" placeholder="Cari barang, kode, atau kategori...">
           </div>
           <select id="categoryFilter"><option value="">Semua kategori</option></select>
-          <button id="exportCsvBtn" class="secondary-btn" type="button"><i data-lucide="file-down"></i> Export CSV</button>
+          <button id="exportCsvBtn" class="secondary-btn" type="button"><svg class="ic"><use href="#i-file-down"/></svg> Export CSV</button>
         </div>
         <div class="panel">
           <div id="allProducts" class="product-list"></div>
@@ -215,7 +253,7 @@
       <div id="page-transactions" class="page hidden">
         <div class="page-heading">
           <div><h2>Transaksi</h2><p>Catatan stok masuk dan stok keluar.</p></div>
-          <button class="primary-btn accent" id="addTransactionBtn"><i data-lucide="plus"></i> Transaksi</button>
+          <button class="primary-btn accent" id="addTransactionBtn"><svg class="ic"><use href="#i-plus"/></svg> Transaksi</button>
         </div>
         <div class="panel"><div id="transactionList"></div></div>
       </div>
@@ -226,47 +264,47 @@
 
         <h4 class="settings-group-title">Akun</h4>
         <div class="panel settings-list">
-          <div class="setting-row" id="profileRow"><span class="setting-icon"><i data-lucide="user"></i></span><div><b id="profileName">Admin</b><small id="profileEmail">-</small></div><i data-lucide="chevron-right"></i></div>
-          <div class="setting-row" id="passwordRow"><span class="setting-icon"><i data-lucide="lock"></i></span><div><b>Ubah Password</b><small>Perbarui kata sandi akun Anda</small></div><i data-lucide="chevron-right"></i></div>
-          <div class="setting-row" id="sheetSettingRow"><span class="setting-icon"><i data-lucide="file-spreadsheet"></i></span><div><b>Google Spreadsheet</b><small id="settingsSheetStatus">Belum terhubung</small></div><i data-lucide="chevron-right"></i></div>
+          <div class="setting-row" id="profileRow"><span class="setting-icon"><svg class="ic"><use href="#i-user"/></svg></span><div><b id="profileName">Admin</b><small id="profileEmail">-</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
+          <div class="setting-row" id="passwordRow"><span class="setting-icon"><svg class="ic"><use href="#i-lock"/></svg></span><div><b>Ubah Password</b><small>Perbarui kata sandi akun Anda</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
+          <div class="setting-row" id="sheetSettingRow"><span class="setting-icon"><svg class="ic"><use href="#i-file-spreadsheet"/></svg></span><div><b>Google Spreadsheet</b><small id="settingsSheetStatus">Belum terhubung</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
         </div>
 
         <h4 class="settings-group-title">Tampilan</h4>
         <div class="panel">
           <div class="theme-switch">
-            <button type="button" class="theme-option" data-theme="light"><i data-lucide="sun"></i> Terang</button>
-            <button type="button" class="theme-option" data-theme="dark"><i data-lucide="moon"></i> Gelap</button>
-            <button type="button" class="theme-option" data-theme="system"><i data-lucide="monitor"></i> Sistem</button>
+            <button type="button" class="theme-option" data-theme="light"><svg class="ic"><use href="#i-sun"/></svg> Terang</button>
+            <button type="button" class="theme-option" data-theme="dark"><svg class="ic"><use href="#i-moon"/></svg> Gelap</button>
+            <button type="button" class="theme-option" data-theme="system"><svg class="ic"><use href="#i-monitor"/></svg> Sistem</button>
           </div>
         </div>
 
         <h4 class="settings-group-title">Preferensi</h4>
         <div class="panel settings-list">
-          <div class="setting-row" style="cursor:default"><span class="setting-icon"><i data-lucide="trending-down"></i></span><div><b>Batas Stok Menipis</b><small>Tandai barang "Menipis" jika stok ≤ nilai ini</small></div><input id="lowStockThreshold" type="number" min="1" step="1"></div>
-          <div class="setting-row" style="cursor:default"><span class="setting-icon"><i data-lucide="barcode"></i></span><div><b>Format Kode Barang</b><small>Awalan kode otomatis (BRG → BRG001, INV/2026/ → INV/2026/001). Kosong = ikuti kode lama</small></div><input id="kodeFormat" type="text" maxlength="20" placeholder="BRG" spellcheck="false" autocomplete="off"></div>
+          <div class="setting-row" style="cursor:default"><span class="setting-icon"><svg class="ic"><use href="#i-trending-down"/></svg></span><div><b>Batas Stok Menipis</b><small>Tandai barang "Menipis" jika stok ≤ nilai ini</small></div><input id="lowStockThreshold" type="number" min="1" step="1"></div>
+          <div class="setting-row" style="cursor:default"><span class="setting-icon"><svg class="ic"><use href="#i-barcode"/></svg></span><div><b>Format Kode Barang</b><small>Awalan kode otomatis (BRG → BRG001, INV/2026/ → INV/2026/001). Kosong = ikuti kode lama</small></div><input id="kodeFormat" type="text" maxlength="20" placeholder="BRG" spellcheck="false" autocomplete="off"></div>
         </div>
 
         <h4 class="settings-group-title">Lainnya</h4>
         <div class="panel settings-list">
-          <div class="setting-row" style="cursor:default"><span class="setting-icon"><i data-lucide="info"></i></span><div><b>Tentang Aplikasi</b><small>Stokita v1.0 · Sistem Inventaris Barang · Kelompok 1</small></div></div>
-          <div class="setting-row danger" id="logoutBtn"><span class="setting-icon"><i data-lucide="log-out"></i></span><div><b>Keluar</b></div></div>
+          <div class="setting-row" style="cursor:default"><span class="setting-icon"><svg class="ic"><use href="#i-info"/></svg></span><div><b>Tentang Aplikasi</b><small>Stokita v1.0 · Sistem Inventaris Barang · Kelompok 1</small></div></div>
+          <div class="setting-row danger" id="logoutBtn"><span class="setting-icon"><svg class="ic"><use href="#i-log-out"/></svg></span><div><b>Keluar</b></div></div>
         </div>
       </div>
     </main>
 
     <!-- BOTTOM NAV (mobile) -->
     <nav class="bottom-nav" id="bottomNav" aria-label="Menu navigasi bawah">
-      <button class="nav-item active" data-page="dashboard"><i data-lucide="layout-dashboard"></i><span>Beranda</span></button>
-      <button class="nav-item" data-page="products"><i data-lucide="package"></i><span>Barang</span></button>
-      <button class="nav-item" data-page="transactions"><i data-lucide="arrow-left-right"></i><span>Transaksi</span></button>
-      <button class="nav-item" data-page="settings"><i data-lucide="settings"></i><span>Pengaturan</span></button>
+      <button class="nav-item active" data-page="dashboard"><svg class="ic"><use href="#i-layout-dashboard"/></svg><span>Beranda</span></button>
+      <button class="nav-item" data-page="products"><svg class="ic"><use href="#i-package"/></svg><span>Barang</span></button>
+      <button class="nav-item" data-page="transactions"><svg class="ic"><use href="#i-arrow-left-right"/></svg><span>Transaksi</span></button>
+      <button class="nav-item" data-page="settings"><svg class="ic"><use href="#i-settings"/></svg><span>Pengaturan</span></button>
     </nav>
   </section>
 
   <!-- PRODUCT MODAL -->
   <div id="productModal" class="modal hidden">
     <div class="modal-card">
-      <div class="modal-head"><h2 id="modalTitle">Tambah Barang</h2><button id="closeModal"><i data-lucide="x"></i></button></div>
+      <div class="modal-head"><h2 id="modalTitle">Tambah Barang</h2><button id="closeModal" aria-label="Tutup"><svg class="ic"><use href="#i-x"/></svg></button></div>
       <form id="productForm">
         <input type="hidden" id="editId">
         <label>Foto Barang</label>
@@ -295,7 +333,7 @@
   <!-- PROFILE MODAL -->
   <div id="profileModal" class="modal hidden">
     <div class="modal-card">
-      <div class="modal-head"><h2>Edit Profil</h2><button id="closeProfileModal"><i data-lucide="x"></i></button></div>
+      <div class="modal-head"><h2>Edit Profil</h2><button id="closeProfileModal" aria-label="Tutup"><svg class="ic"><use href="#i-x"/></svg></button></div>
       <form id="profileForm">
         <label>Nama lengkap</label>
         <input id="profileFullName" required placeholder="Nama lengkap">
@@ -309,7 +347,7 @@
   <!-- PASSWORD MODAL -->
   <div id="passwordModal" class="modal hidden">
     <div class="modal-card">
-      <div class="modal-head"><h2>Ubah Password</h2><button id="closePasswordModal"><i data-lucide="x"></i></button></div>
+      <div class="modal-head"><h2>Ubah Password</h2><button id="closePasswordModal" aria-label="Tutup"><svg class="ic"><use href="#i-x"/></svg></button></div>
       <form id="passwordForm">
         <label>Password baru</label>
         <input id="newPassword" type="password" minlength="6" required placeholder="Minimal 6 karakter">
@@ -323,7 +361,7 @@
   <!-- TRANSACTION MODAL -->
   <div id="transactionModal" class="modal hidden">
     <div class="modal-card">
-      <div class="modal-head"><h2>Transaksi Stok</h2><button id="closeTransaction"><i data-lucide="x"></i></button></div>
+      <div class="modal-head"><h2>Transaksi Stok</h2><button id="closeTransaction" aria-label="Tutup"><svg class="ic"><use href="#i-x"/></svg></button></div>
       <form id="transactionForm">
         <label>Barang</label>
         <select id="transactionProduct" required></select>
@@ -341,14 +379,13 @@
   <!-- DETAIL MODAL -->
   <div id="detailModal" class="modal hidden">
     <div class="modal-card detail-card">
-      <div class="modal-head"><h2>Detail Barang</h2><button id="closeDetail"><i data-lucide="x"></i></button></div>
+      <div class="modal-head"><h2>Detail Barang</h2><button id="closeDetail" aria-label="Tutup"><svg class="ic"><use href="#i-x"/></svg></button></div>
       <div id="detailContent"></div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
-<script src="app.js"></script>
-<script>try{window.lucide&&lucide.createIcons()}catch(e){}</script>
+  <script src="supabase-config.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

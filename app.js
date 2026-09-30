@@ -7,7 +7,7 @@ let products = [], transactions = [], currentUser = null, currentProfile = null,
 let lowStockThreshold = Math.max(1, Number(localStorage.getItem("stokita-low-stock")) || 3);
 let codeFormat = (localStorage.getItem("stokita-kode-format") || "").trim();
 const $ = id => document.getElementById(id);
-const paintIcons = () => { try { window.lucide && window.lucide.createIcons(); } catch(e){} };
+const ico = name => `<svg class="ic"><use href="#i-${name}"/></svg>`;
 const rupiah = n => new Intl.NumberFormat("id-ID", {style:"currency", currency:"IDR", maximumFractionDigits:0}).format(Number(n || 0));
 const esc = v => String(v ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 const status = n => Number(n) <= 0 ? ["Habis","empty"] : Number(n) <= lowStockThreshold ? ["Menipis","low"] : ["Aman","safe"];
@@ -113,9 +113,9 @@ function renderProducts(box, list, actions){
   box.innerHTML = list.map(p => {
     const [s,cl] = status(p.stok);
     const imgHtml = p.image_url 
-      ? `<img src="${esc(p.image_url)}" style="width:44px;height:44px;object-fit:cover;border-radius:8px">` 
-      : `<div class="product-icon-placeholder"><i data-lucide="package"></i></div>`;
-    
+      ? `<img src="${esc(p.image_url)}" alt="">` 
+      : `<div class="product-icon-placeholder">${ico("package")}</div>`;
+
     return `<div class="product-row">
       <div class="product-img">${imgHtml}</div>
       <div><b>${esc(p.nama)}</b><small>${esc(p.kode)}</small></div>
@@ -123,11 +123,10 @@ function renderProducts(box, list, actions){
       <div><b>${p.stok}</b><small>${esc(p.satuan)}</small></div>
       <div class="hide-mobile"><span class="status ${cl}">${s}</span></div>
       <div class="row-actions">${actions 
-        ? `<button onclick="showDetail('${p.id}')"><i data-lucide="eye"></i></button><button onclick="editProduct('${p.id}')"><i data-lucide="edit"></i></button><button onclick="deleteProduct('${p.id}')"><i data-lucide="trash-2"></i></button>` 
-        : `<button onclick="showDetail('${p.id}')"><i data-lucide="chevron-right"></i></button>`}</div>
+        ? `<button onclick="showDetail('${p.id}')">${ico("eye")}</button><button onclick="editProduct('${p.id}')">${ico("edit")}</button><button onclick="deleteProduct('${p.id}')">${ico("trash-2")}</button>` 
+        : `<button onclick="showDetail('${p.id}')">${ico("chevron-right")}</button>`}</div>
     </div>`;
   }).join("");
-  paintIcons();
 }
 function renderTransactions(){
   const box = $("transactionList");
@@ -136,14 +135,13 @@ function renderTransactions(){
   box.innerHTML = transactions.map(t => {
     const icon = t.type === "masuk" ? "download" : "upload";
     const colorClass = t.type === "masuk" ? "safe" : "low";
-    return `<div class="product-row transaction-row" style="grid-template-columns:45px 1fr 110px 1fr">
-      <div class="product-img transaction-icon ${colorClass}"><i data-lucide="${icon}"></i></div>
+    return `<div class="product-row transaction-row">
+      <div class="product-img transaction-icon ${colorClass}">${ico(icon)}</div>
       <div><b>${esc(t.products?.nama || "Barang")}</b><small>${esc(t.products?.kode || "")}</small></div>
       <div><span class="status ${colorClass}">${t.type === "masuk" ? "Stok Masuk" : "Stok Keluar"}</span></div>
       <div><b>${t.jumlah}</b><small>${esc(t.keterangan || "")} · ${new Date(t.created_at).toLocaleString("id-ID")}</small></div>
     </div>`;
   }).join("");
-  paintIcons();
 }
 function go(page){
   document.querySelectorAll(".page").forEach(x => x.classList.add("hidden"));
@@ -216,11 +214,10 @@ async function deleteProduct(id){
 function showDetail(id){
   const p = products.find(x => x.id === id); if(!p) return; const [s,cl] = status(p.stok);
   const imgContent = p.image_url 
-    ? `<img src="${esc(p.image_url)}" style="max-width:100%;max-height:190px;border-radius:12px">` 
-    : `<div class="detail-icon-placeholder"><i data-lucide="package"></i></div>`;
-  $("detailContent").innerHTML = `<div class="detail-image">${imgContent}</div><div class="detail-title">${esc(p.nama)}</div><span class="status ${cl}">${s}</span><div class="detail-grid"><div class="detail-item"><small>Kode</small><b>${esc(p.kode)}</b></div><div class="detail-item"><small>Kategori</small><b>${esc(p.kategori)}</b></div><div class="detail-item"><small>Harga</small><b>${rupiah(p.harga)}</b></div><div class="detail-item"><small>Stok</small><b>${p.stok} ${esc(p.satuan)}</b></div><div class="detail-item"><small>Supplier</small><b>${esc(p.supplier)}</b></div></div><p style="font-size:11px;color:#66758d">${esc(p.deskripsi)}</p><button class="primary-btn" onclick="editProduct('${p.id}');$('detailModal').classList.add('hidden')"><i data-lucide="edit"></i> Edit</button> <button class="primary-btn" style="background:#e9364e" onclick="deleteProduct('${p.id}');$('detailModal').classList.add('hidden')"><i data-lucide="trash-2"></i> Hapus</button>`;
+    ? `<img src="${esc(p.image_url)}" class="detail-photo" alt="">` 
+    : `<div class="detail-icon-placeholder">${ico("package")}</div>`;
+  $("detailContent").innerHTML = `<div class="detail-image">${imgContent}</div><div class="detail-title">${esc(p.nama)}</div><span class="status ${cl}">${s}</span><div class="detail-grid"><div class="detail-item"><small>Kode</small><b>${esc(p.kode)}</b></div><div class="detail-item"><small>Kategori</small><b>${esc(p.kategori)}</b></div><div class="detail-item"><small>Harga</small><b>${rupiah(p.harga)}</b></div><div class="detail-item"><small>Stok</small><b>${p.stok} ${esc(p.satuan)}</b></div><div class="detail-item"><small>Supplier</small><b>${esc(p.supplier)}</b></div></div><p class="detail-desc">${esc(p.deskripsi)}</p><div class="detail-actions"><button class="primary-btn" onclick="editProduct('${p.id}');$('detailModal').classList.add('hidden')">${ico("edit")} Edit</button><button class="primary-btn danger" onclick="deleteProduct('${p.id}');$('detailModal').classList.add('hidden')">${ico("trash-2")} Hapus</button></div>`;
   $("detailModal").classList.remove("hidden");
-  paintIcons();
 }
 function openTransactionModal(presetType){
   if(!products.length) return alert("Tambahkan barang terlebih dahulu.");
@@ -267,7 +264,7 @@ function applyTheme(pref){
   document.documentElement.setAttribute("data-theme", resolveTheme(pref));
   document.querySelectorAll(".theme-option").forEach(b => b.classList.toggle("active", b.dataset.theme === pref));
 }
-let themePref = localStorage.getItem("stokita-theme") || "system";
+let themePref = localStorage.getItem("stokita-theme") || "dark";
 function openPasswordModal(){
   $("newPassword").value = ""; $("confirmPassword").value = "";
   $("passwordModal").classList.remove("hidden");
@@ -286,8 +283,7 @@ async function connectSheet(){
   const url=$("sheetUrl").value.trim();
   if(!url.includes("docs.google.com/spreadsheets")) return alert("Masukkan link Google Spreadsheet yang valid.");
   const {error}=await sb.from("profiles").update({spreadsheet_url:url}).eq("id",currentUser.id); if(error) throw error;
-  $("sheetStatus").innerHTML='<i data-lucide="check-circle"></i> Link spreadsheet tersimpan di Supabase<br><i data-lucide="check-circle"></i> Tekan Import Data untuk membaca spreadsheet';
-  paintIcons();
+  $("sheetStatus").innerHTML=`${ico("check-circle")} Link spreadsheet tersimpan di Supabase<br>${ico("check-circle")} Tekan Import Data untuk membaca spreadsheet`;
   $("settingsSheetStatus").textContent="Link tersimpan";
 }
 async function importSpreadsheet(){
@@ -302,7 +298,7 @@ async function importSpreadsheet(){
       text=t; break;
     }catch(e){ lastErr=e; }
   }
-  if(text===null){ $("sheetStatus").innerHTML='<i data-lucide="alert-circle"></i> Tidak bisa membaca spreadsheet. Pastikan spreadsheet dibagikan <b>Anyone with the link <i data-lucide="arrow-right"></i> Viewer</b>.'; paintIcons(); throw lastErr || new Error("Gagal membaca spreadsheet."); }
+  if(text===null){ $("sheetStatus").innerHTML=`${ico("alert-circle")} Tidak bisa membaca spreadsheet. Pastikan spreadsheet dibagikan <b>Anyone with the link ${ico("arrow-right")} Viewer</b>.`; throw lastErr || new Error("Gagal membaca spreadsheet."); }
   const rows=csvToRows(text); if(rows.length<2) throw new Error("Spreadsheet kosong atau hanya memiliki header.");
   const headers=rows[0].map(normHeader);
   const aliases={kode:["kode","code","kodebarang","itemcode"],nama:["nama","name","namabarang","item","product"],kategori:["kategori","category"],harga:["harga","price","cost"],stok:["stok","stock","jumlah","quantity"],satuan:["satuan","unit"],supplier:["supplier","pemasok"],deskripsi:["deskripsi","description","keterangan"],image_url:["imageurl","foto","gambar","image"]};
@@ -315,7 +311,7 @@ async function importSpreadsheet(){
   }
   if(!imported.length) throw new Error("Tidak ada baris produk yang valid untuk diimpor.");
   const {error}=await sb.from("products").upsert(imported,{onConflict:"user_id,kode"}); if(error) throw error;
-  await loadData(); $("sheetStatus").innerHTML=`<i data-lucide="check-circle"></i> Berhasil mengimpor <b>${imported.length}</b> produk ke Supabase.`; paintIcons();
+  await loadData(); $("sheetStatus").innerHTML=`${ico("check-circle")} Berhasil mengimpor <b>${imported.length}</b> produk ke Supabase.`;
 }
 async function googleAuth(){
   const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:window.location.origin+window.location.pathname,queryParams:{access_type:"offline",prompt:"consent"},scopes:"https://www.googleapis.com/auth/spreadsheets.readonly"}});
@@ -347,8 +343,7 @@ async function boot(){
 
 document.addEventListener("DOMContentLoaded",()=>{
   setTimeout(()=>{$("splash").classList.add("hidden"); if(!currentUser) $("auth").classList.remove("hidden");},1200);
-  document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{const m=b.dataset.auth;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));$("loginForm").classList.toggle("hidden",m!=="login");$("registerForm").classList.toggle("hidden",m!=="register");}));
-  document.querySelectorAll("[data-switch]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();document.querySelector(`.tab[data-auth="${a.dataset.switch}"]`).click();}));
+  /* Tab Masuk/Daftar kini murni CSS (radio + label), tanpa listener JS. */
   $("loginForm").addEventListener("submit",async e=>{
     e.preventDefault();
     const btn=e.target.querySelector('button[type="submit"]');
