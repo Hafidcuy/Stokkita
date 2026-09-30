@@ -151,10 +151,24 @@ function go(page){
   $("sidebar").classList.remove("open");
   render();
 }
+// Kode barang otomatis: lanjut dari angka terbesar yang sudah ada (mis. BRG005 -> BRG006)
+function nextKode(){
+  let maxN = 0, prefix = null;
+  (products||[]).forEach(p=>{
+    const m = String(p.kode||"").trim().match(/^(.*?)(\d+)$/);
+    if(m){ const n = parseInt(m[2],10); if(n >= maxN){ maxN = n; prefix = m[1]; } }
+  });
+  if(prefix === null) prefix = "BRG";
+  let n = maxN + 1, kode;
+  const pad = x => prefix + String(x).padStart(Math.max(3, String(x).length), "0");
+  kode = pad(n);
+  while((products||[]).some(p => p.kode === kode)) kode = pad(++n);
+  return kode;
+}
 function openProductModal(p=null){
   $("productModal").classList.remove("hidden");
   $("modalTitle").textContent = p ? "Edit Barang" : "Tambah Barang";
-  $("editId").value = p?.id || ""; $("kode").value = p?.kode || ""; $("nama").value = p?.nama || "";
+  $("editId").value = p?.id || ""; $("kode").value = p?.kode || nextKode(); $("nama").value = p?.nama || "";
   $("kategori").value = p?.kategori || ""; $("harga").value = p?.harga || ""; $("stok").value = p?.stok ?? "";
   $("satuan").value = p?.satuan || ""; $("supplier").value = p?.supplier || ""; $("deskripsi").value = p?.deskripsi || ""; $("photo").value = "";
 }
@@ -340,6 +354,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.querySelectorAll(".nav-item").forEach(x=>x.addEventListener("click",()=>go(x.dataset.page)));
   document.querySelectorAll(".text-btn").forEach(x=>x.addEventListener("click",()=>go(x.dataset.page)));
   $("addProductBtn").addEventListener("click",()=>openProductModal()); $("addFromDash").addEventListener("click",()=>openProductModal()); $("addTransactionBtn").addEventListener("click",()=>openTransactionModal());
+  $("kode").addEventListener("blur",()=>{ if(!$("kode").value.trim()) $("kode").value = nextKode(); });
   $("qaAddProduct").addEventListener("click",()=>openProductModal()); $("qaStockIn").addEventListener("click",()=>openTransactionModal("masuk")); $("qaStockOut").addEventListener("click",()=>openTransactionModal("keluar"));
   applyTheme(themePref);
   document.querySelectorAll(".theme-option").forEach(b=>b.addEventListener("click",()=>{themePref=b.dataset.theme;localStorage.setItem("stokita-theme",themePref);applyTheme(themePref);}));
