@@ -336,6 +336,30 @@ function installApp(){
   if(installPrompt){ installPrompt.prompt(); installPrompt.userChoice.finally(() => { installPrompt = null; }); }
   else alert('Pasang Stokita sebagai aplikasi:\n\n• Android/Chrome: menu ⋮ → "Pasang aplikasi" / "Tambahkan ke layar utama"\n• iPhone/Safari: tombol Bagikan → "Tambahkan ke Layar Utama"');
 }
+/* ===== Kirim data ke Google Spreadsheet via Apps Script ===== */
+function gsUrl(){ return (localStorage.getItem("stokita-gs-url") || "").trim(); }
+async function sendSheet(){
+  const url = gsUrl();
+  if(!/^https:\/\/script\.google(usercontent)?\.com\/\S+\/exec$/.test(url)) return alert("Isi dulu URL Web App Apps Script (diakhiri /exec).");
+  if(!products.length) return alert("Belum ada data untuk dikirim.");
+  const btn = $("sendSheetBtn"); btn.disabled = true; const label = btn.textContent; btn.textContent = "Mengirim...";
+  try{
+    const pr = await sb.from("products").select("*"); if(pr.error) throw pr.error;
+    const tr = await sb.from("transactions").select("*"); if(tr.error) throw tr.error;
+    const res = await fetch(url, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify({app:"Stokita", products:pr.data || [], transactions:tr.data || []})});
+    const out = await res.json().catch(() => null);
+    if(!res.ok || !out || out.ok !== true) throw new Error(out?.message || "Spreadsheet tidak merespons");
+    $("sheetSyncStatus").innerHTML = `${ico("check-circle")} ${out.barang} barang & ${out.transaksi} transaksi terkirim · ${new Date().toLocaleTimeString("id-ID")} WIB`;
+  }finally{ btn.disabled = false; btn.textContent = label; }
+}
+async function testSheet(){
+  const url = gsUrl();
+  if(!url) return alert("Isi dulu URL Web App Apps Script.");
+  const res = await fetch(url);
+  const out = await res.json().catch(() => null);
+  if(!res.ok || !out || out.ok !== true) throw new Error("Koneksi gagal. Pastikan URL benar dan sudah di-Deploy sebagai Web App (Anyone).");
+  $("sheetSyncStatus").innerHTML = `${ico("check-circle")} Koneksi berhasil · aplikasi siap mengirim data`;
+}
 function resolveTheme(pref){
   if(pref === "dark" || pref === "light") return pref;
   return (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
@@ -473,6 +497,14 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("clearCacheBtn").addEventListener("click",()=>clearCache().catch(fail));
   $("resetRow").addEventListener("click",()=>factoryReset().catch(fail));
   $("installBtn").addEventListener("click",installApp);
+  $("gsUrl").value = gsUrl();
+  $("gsUrl").addEventListener("change",()=>{
+    const v = $("gsUrl").value.trim();
+    localStorage.setItem("stokita-gs-url", v);
+    $("sheetSyncStatus").textContent = v ? "URL tersimpan. Tekan Uji Koneksi untuk memastikan." : "URL dikosongkan.";
+  });
+  $("sendSheetBtn").addEventListener("click",()=>sendSheet().catch(fail));
+  $("testSheetBtn").addEventListener("click",()=>testSheet().catch(fail));
   document.querySelectorAll(".setting-details").forEach(d=>d.addEventListener("toggle",()=>{ if(d.open) refreshStorageInfo(); }));
   $("closeProfileModal").addEventListener("click",()=>$("profileModal").classList.add("hidden"));
   $("profileForm").addEventListener("submit",e=>saveProfile(e).catch(fail));

@@ -500,14 +500,21 @@ input[type="file"]{height:auto;padding:9px 11px;font-size:12.5px;border-style:da
 
 /* ---------------- Bottom nav (mobile) ---------------- */
 .bottom-nav{display:none}
+@media (min-width:1440px){
+  /* layar sangat lebar: konten ditengahkan di sisi kanan sidebar */
+  .main-content{margin-left:calc((100vw - 940px)/2)}
+}
+@media (max-width:1100px){
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+}
 @media (max-width:900px){
   .sidebar{display:none}
   .topbar{margin-left:0;padding:0 15px}
-  .main-content{margin-left:0;padding:18px 14px 104px}
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .main-content{margin-left:0;padding:18px 14px 112px}
   .dashboard-grid{grid-template-columns:1fr}
   .bottom-nav{
-    display:flex;position:fixed;left:12px;right:12px;bottom:12px;z-index:9;
+    display:flex;position:fixed;left:12px;right:12px;z-index:9;
+    bottom:calc(12px + env(safe-area-inset-bottom,0px));
     justify-content:space-around;padding:8px 6px;
     background:var(--navy);border-radius:18px;
     box-shadow:0 14px 32px -12px rgba(15,25,55,.55);
@@ -588,6 +595,32 @@ input[type="file"]{height:auto;padding:9px 11px;font-size:12.5px;border-style:da
 @media (max-width:560px){
   .two-col{grid-template-columns:1fr}
   .page-heading{flex-wrap:wrap}
+  .stats-grid{gap:10px}
+  .stat-card{padding:13px 14px}
+  .stat-card b{font-size:22px}
+  .panel{padding:13px}
+  /* Pengaturan: label kiri, input & tombol pindah baris bawah */
+  .settings-list{padding:3px 12px}
+  .setting-row{gap:10px;padding:12px 4px;flex-wrap:wrap}
+  .setting-row input{width:100%;order:3;flex:1 1 100%;margin-left:46px}
+  .setting-body{padding:4px 4px 14px}
+  .setting-actions{flex-direction:column}
+  .setting-actions .secondary-btn{flex:1 1 auto;min-width:0;width:100%}
+  .theme-switch{flex-wrap:wrap}
+  .theme-option{flex:1 1 30%;min-width:92px;font-size:12px}
+}
+@media (max-width:420px){
+  .topbar{padding:0 12px;gap:8px}
+  .brand-small strong{font-size:14.5px}
+  .brand-small span{display:none}
+  .modal{padding:12px}
+  .modal-card{padding:16px 15px 18px;max-height:92vh}
+  .detail-grid{grid-template-columns:1fr}
+  .detail-actions{flex-direction:column}
+  .main-content{padding:16px 12px 112px}
+  .bottom-nav{left:8px;right:8px}
+  .row-actions button{width:36px;height:36px}
+  .setting-row input{margin-left:0}
 }
 
 @media (prefers-reduced-motion:reduce){

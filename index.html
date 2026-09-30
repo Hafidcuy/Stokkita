@@ -280,6 +280,17 @@
         <div class="panel settings-list">
           <div class="setting-row" id="profileRow"><span class="setting-icon"><svg class="ic"><use href="#i-user"/></svg></span><div><b id="profileName">Admin</b><small id="profileEmail">-</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
           <div class="setting-row" id="sheetSettingRow"><span class="setting-icon"><svg class="ic"><use href="#i-file-spreadsheet"/></svg></span><div><b>Google Spreadsheet</b><small id="settingsSheetStatus">Belum terhubung</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
+          <details class="setting-details">
+            <summary class="setting-row"><span class="setting-icon"><svg class="ic"><use href="#i-upload"/></svg></span><div><b>Kirim ke Spreadsheet</b><small>Kirim barang &amp; transaksi, langsung tertata rapi</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></summary>
+            <div class="setting-body">
+              <input id="gsUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" spellcheck="false" autocomplete="off">
+              <p class="setting-note" id="sheetSyncStatus">Isi dulu URL Web App Google Apps Script (petunjuk setup ada di repo: <b>SETUP_GOOGLE_SHEET.md</b>). Tersimpan di perangkat ini.</p>
+              <div class="setting-actions">
+                <button type="button" class="secondary-btn" id="sendSheetBtn"><svg class="ic"><use href="#i-upload"/></svg> Kirim Data</button>
+                <button type="button" class="secondary-btn" id="testSheetBtn"><svg class="ic"><use href="#i-link"/></svg> Uji Koneksi</button>
+              </div>
+            </div>
+          </details>
           <div class="setting-row" style="cursor:default"><span class="setting-icon"><svg class="ic"><use href="#i-barcode"/></svg></span><div><b>Format Kode Barang</b><small>Awalan kode otomatis (BRG → BRG001). Kosong = ikuti kode lama</small></div><input id="kodeFormat" type="text" maxlength="20" placeholder="BRG" spellcheck="false" autocomplete="off"></div>
           <div class="setting-row" style="cursor:default"><span class="setting-icon"><svg class="ic"><use href="#i-trending-down"/></svg></span><div><b>Batas Stok Menipis</b><small>Tandai barang "Menipis" jika stok ≤ nilai ini</small></div><input id="lowStockThreshold" type="number" min="1" step="1"></div>
         </div>
@@ -338,7 +349,6 @@
       <button class="nav-item active" data-page="dashboard"><svg class="ic"><use href="#i-layout-dashboard"/></svg><span>Beranda</span></button>
       <button class="nav-item" data-page="products"><svg class="ic"><use href="#i-package"/></svg><span>Barang</span></button>
       <button class="nav-item" data-page="transactions"><svg class="ic"><use href="#i-arrow-left-right"/></svg><span>Transaksi</span></button>
-      <button class="nav-item" data-page="settings"><svg class="ic"><use href="#i-settings"/></svg><span>Pengaturan</span></button>
     </nav>
   </section>
 
