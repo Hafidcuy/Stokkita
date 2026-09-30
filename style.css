@@ -139,3 +139,18 @@ svg.lucide{stroke-width:2;flex:none}
 #notifBtn .lucide{width:19px;height:19px}
 
 .google-btn .lucide{width:16px;height:16px}
+
+/* ============ Bottom Nav (mobile) ============ */
+.bottom-nav{display:none}
+.bottom-nav .nav-item{width:auto;margin:0;padding:9px 4px 7px;border-radius:0;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:3px;text-align:center;color:#71809a;background:none;font-size:10px;font-weight:600}
+.bottom-nav .nav-item span{margin-left:0}
+.bottom-nav .nav-item .lucide{width:20px;height:20px}
+.bottom-nav .nav-item.active,.bottom-nav .nav-item:hover{background:none;color:#2868e8}
+[data-theme="dark"] .bottom-nav .nav-item{color:#8291a8}
+[data-theme="dark"] .bottom-nav .nav-item.active,[data-theme="dark"] .bottom-nav .nav-item:hover{color:#4d9bff}
+
+@media(max-width:900px){
+  .bottom-nav{display:flex;position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #e4e9f1;padding-bottom:env(safe-area-inset-bottom);z-index:9}
+  [data-theme="dark"] .bottom-nav{background:#141d2b;border-top-color:#232f42}
+  .main-content{padding-bottom:78px;padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+}
