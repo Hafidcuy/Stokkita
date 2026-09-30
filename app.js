@@ -397,3 +397,10 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("logoutBtn").addEventListener("click",async()=>{const {error}=await sb.auth.signOut();if(error)fail(error);});
   boot().catch(fail);
 });
+
+/* PWA: daftarkan service worker (diabaikan jika tidak didukung) */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+  });
+}
