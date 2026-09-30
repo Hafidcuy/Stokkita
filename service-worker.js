@@ -5,7 +5,7 @@
    - Aset statis (ikon, gambar, manifest) memakai stale-while-revalidate.
    - Request lintas origin (Supabase, Google Fonts) dibiarkan langsung. */
 
-const VERSION = "v1";
+const VERSION = "v2";
 const CACHE = "stokita-cache-" + VERSION;
 
 const PRECACHE = [
@@ -17,7 +17,8 @@ const PRECACHE = [
   "./supabase-config.js",
   "./manifest.json",
   "./icon-192.png",
-  "./icon-512.png"
+  "./icon-512.png",
+  "./logo.png"
 ];
 
 self.addEventListener("install", (event) => {
