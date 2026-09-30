@@ -5,6 +5,7 @@ const sb = createClient(window.SUPABASE_URL, window.SUPABASE_KEY, {
 
 let products = [], transactions = [], currentUser = null, currentProfile = null, dataLoadedFor = null;
 let lowStockThreshold = Math.max(1, Number(localStorage.getItem("stokita-low-stock")) || 3);
+let codeFormat = (localStorage.getItem("stokita-kode-format") || "").trim();
 const $ = id => document.getElementById(id);
 const paintIcons = () => { try { window.lucide && window.lucide.createIcons(); } catch(e){} };
 const rupiah = n => new Intl.NumberFormat("id-ID", {style:"currency", currency:"IDR", maximumFractionDigits:0}).format(Number(n || 0));
@@ -153,6 +154,22 @@ function go(page){
 }
 // Kode barang otomatis: lanjut dari angka terbesar yang sudah ada (mis. BRG005 -> BRG006)
 function nextKode(){
+  // Format custom dari Pengaturan (awalan): "BRG" -> BRG001, "INV/2026/" -> INV/2026/001
+  if(codeFormat){
+    let maxN = 0;
+    (products||[]).forEach(p=>{
+      const k = String(p.kode||"").trim();
+      if(!k.startsWith(codeFormat)) return;
+      const mm = k.slice(codeFormat.length).match(/^(\d+)/);
+      if(mm) maxN = Math.max(maxN, parseInt(mm[1],10));
+    });
+    let n = maxN + 1, kode;
+    const pad = x => codeFormat + String(x).padStart(Math.max(3, String(x).length), "0");
+    kode = pad(n);
+    while((products||[]).some(p => p.kode === kode)) kode = pad(++n);
+    return kode;
+  }
+  // Tanpa format custom: ikuti pola kode barang yang sudah ada
   let maxN = 0, prefix = null;
   (products||[]).forEach(p=>{
     const m = String(p.kode||"").trim().match(/^(.*?)(\d+)$/);
@@ -168,6 +185,7 @@ function nextKode(){
 function openProductModal(p=null){
   $("productModal").classList.remove("hidden");
   $("modalTitle").textContent = p ? "Edit Barang" : "Tambah Barang";
+  $("kode").placeholder = codeFormat ? `Terisi otomatis (${codeFormat}001), bisa diubah` : "Terisi otomatis (mis. BRG001), bisa diubah";
   $("editId").value = p?.id || ""; $("kode").value = p?.kode || nextKode(); $("nama").value = p?.nama || "";
   $("kategori").value = p?.kategori || ""; $("harga").value = p?.harga || ""; $("stok").value = p?.stok ?? "";
   $("satuan").value = p?.satuan || ""; $("supplier").value = p?.supplier || ""; $("deskripsi").value = p?.deskripsi || ""; $("photo").value = "";
@@ -361,6 +379,9 @@ document.addEventListener("DOMContentLoaded",()=>{
   if(window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{if(themePref==="system")applyTheme("system");});
   $("lowStockThreshold").value = lowStockThreshold;
   $("lowStockThreshold").addEventListener("change",()=>{const v=Math.max(1,Math.round(Number($("lowStockThreshold").value))||3);lowStockThreshold=v;localStorage.setItem("stokita-low-stock",v);$("lowStockThreshold").value=v;if(currentUser)render();});
+  $("kodeFormat").value = codeFormat;
+  $("kodeFormat").addEventListener("input",()=>{ codeFormat = $("kodeFormat").value.trim(); localStorage.setItem("stokita-kode-format", codeFormat); });
+  $("kodeFormat").addEventListener("change",()=>{ $("kodeFormat").value = codeFormat; });
   $("passwordRow").addEventListener("click",openPasswordModal);
   $("closePasswordModal").addEventListener("click",()=>$("passwordModal").classList.add("hidden"));
   $("passwordForm").addEventListener("submit",e=>savePassword(e).catch(fail));
