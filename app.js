@@ -3,14 +3,28 @@ const sb = createClient(window.SUPABASE_URL, window.SUPABASE_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
 });
 
-let products = [], transactions = [], currentUser = null, currentProfile = null;
+let products = [], transactions = [], currentUser = null, currentProfile = null, dataLoadedFor = null;
 let lowStockThreshold = Math.max(1, Number(localStorage.getItem("stokita-low-stock")) || 3);
 const $ = id => document.getElementById(id);
-const paintIcons = () => { try { window.lucide && window.paintIcons(); } catch(e){} };
+const paintIcons = () => { try { window.lucide && window.lucide.createIcons(); } catch(e){} };
 const rupiah = n => new Intl.NumberFormat("id-ID", {style:"currency", currency:"IDR", maximumFractionDigits:0}).format(Number(n || 0));
 const esc = v => String(v ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
 const status = n => Number(n) <= 0 ? ["Habis","empty"] : Number(n) <= lowStockThreshold ? ["Menipis","low"] : ["Aman","safe"];
-function fail(e){ console.error(e); alert(e?.message || "Terjadi kesalahan."); }
+function fail(e){ console.error(e); alert(localMsg(e)); }
+function localMsg(e){
+  const m = String(e?.message || "");
+  const map = [
+    [/invalid login credentials/i, "Email atau password salah."],
+    [/email not confirmed/i, "Email belum dikonfirmasi. Cek inbox atau folder spam email Anda."],
+    [/user already registered|already registered/i, "Email sudah terdaftar. Gunakan tab Masuk."],
+    [/password should be at least/i, "Password minimal 6 karakter."],
+    [/rate limit|too many (requests|attempts)/i, "Terlalu banyak percobaan. Tunggu sebentar lalu coba lagi."],
+    [/invalid format|invalid email/i, "Format email tidak valid."],
+    [/fetch error|failed to fetch|network/i, "Koneksi gagal. Periksa internet Anda lalu coba lagi."]
+  ];
+  for(const [re, id] of map) if(re.test(m)) return id;
+  return m || "Terjadi kesalahan.";
+}
 
 function parseSpreadsheetId(url){
   const m = url.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/);
@@ -47,6 +61,7 @@ function num(v){
 }
 
 async function loadData(){
+  if(!currentUser) return;
   let r = await sb.from("products").select("*").order("created_at", {ascending:false});
   if(r.error) throw r.error;
   products = r.data || [];
@@ -63,6 +78,7 @@ async function loadData(){
   $("topAvatar").textContent = name.trim().charAt(0).toUpperCase() || "A";
   $("settingsSheetStatus").textContent = p?.spreadsheet_url ? "Link tersimpan" : "Belum terhubung";
   if(p?.spreadsheet_url) $("sheetUrl").value = p.spreadsheet_url;
+  dataLoadedFor = currentUser.id;
   render();
 }
 function render(){
@@ -270,17 +286,30 @@ async function importSpreadsheet(){
   await loadData(); $("sheetStatus").innerHTML=`<i data-lucide="check-circle"></i> Berhasil mengimpor <b>${imported.length}</b> produk ke Supabase.`; paintIcons();
 }
 async function googleAuth(){
-  const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{queryParams:{access_type:"offline",prompt:"consent"},scopes:"https://www.googleapis.com/auth/spreadsheets.readonly"}});
+  const {error}=await sb.auth.signInWithOAuth({provider:"google",options:{redirectTo:window.location.origin+window.location.pathname,queryParams:{access_type:"offline",prompt:"consent"},scopes:"https://www.googleapis.com/auth/spreadsheets.readonly"}});
   if(error) throw error;
 }
 async function boot(){
-  const {data:{session}}=await sb.auth.getSession();
-  if(session){ currentUser=session.user; $("auth").classList.add("hidden"); $("app").classList.remove("hidden"); await loadData(); }
-  else { $("splash").classList.add("hidden"); $("auth").classList.remove("hidden"); }
-  sb.auth.onAuthStateChange(async(_,session)=>{
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    if(session){ currentUser=session.user; $("auth").classList.add("hidden"); $("app").classList.remove("hidden"); await loadData(); }
+    else { $("splash").classList.add("hidden"); $("auth").classList.remove("hidden"); }
+  }catch(e){
+    fail(e);
+    $("splash").classList.add("hidden");
+    if(currentUser){ $("auth").classList.add("hidden"); $("app").classList.remove("hidden"); }
+    else { $("auth").classList.remove("hidden"); }
+  }
+  sb.auth.onAuthStateChange((event,session)=>{
     currentUser=session?.user||null;
-    if(session){ $("auth").classList.add("hidden"); $("app").classList.remove("hidden"); try{await loadData();}catch(e){fail(e);} }
-    else { $("app").classList.add("hidden"); $("auth").classList.remove("hidden"); }
+    if(session){
+      $("auth").classList.add("hidden"); $("app").classList.remove("hidden");
+      if(event!=="INITIAL_SESSION" || dataLoadedFor!==session.user.id) setTimeout(()=>loadData().catch(fail),0);
+    } else {
+      products=[]; transactions=[]; currentProfile=null; dataLoadedFor=null;
+      $("app").classList.add("hidden"); $("auth").classList.remove("hidden");
+      try{ render(); }catch(e){}
+    }
   });
 }
 
@@ -288,8 +317,24 @@ document.addEventListener("DOMContentLoaded",()=>{
   setTimeout(()=>{$("splash").classList.add("hidden"); if(!currentUser) $("auth").classList.remove("hidden");},1200);
   document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{const m=b.dataset.auth;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));$("loginForm").classList.toggle("hidden",m!=="login");$("registerForm").classList.toggle("hidden",m!=="register");}));
   document.querySelectorAll("[data-switch]").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();document.querySelector(`.tab[data-auth="${a.dataset.switch}"]`).click();}));
-  $("loginForm").addEventListener("submit",async e=>{e.preventDefault();try{const email=$("loginUser").value.trim();const {error}=await sb.auth.signInWithPassword({email,password:$("loginPass").value});if(error)throw error;}catch(e){fail(e);}});
-  $("registerForm").addEventListener("submit",async e=>{e.preventDefault();try{const {data,error}=await sb.auth.signUp({email:$("regEmail").value.trim(),password:$("regPass").value,options:{data:{full_name:$("regName").value.trim(),username:$("regUser").value.trim()}}});if(error)throw error;alert(data.session?"Akun dibuat dan sudah login.":"Akun dibuat. Cek email jika konfirmasi email aktif.");document.querySelector('.tab[data-auth="login"]').click();}catch(e){fail(e);}});
+  $("loginForm").addEventListener("submit",async e=>{
+    e.preventDefault();
+    const btn=e.target.querySelector('button[type="submit"]');
+    if(btn.disabled) return;
+    btn.disabled=true; const label=btn.textContent; btn.textContent="Memproses...";
+    try{const email=$("loginUser").value.trim();const {error}=await sb.auth.signInWithPassword({email,password:$("loginPass").value});if(error)throw error;}
+    catch(err){fail(err);}
+    finally{btn.disabled=false; btn.textContent=label;}
+  });
+  $("registerForm").addEventListener("submit",async e=>{
+    e.preventDefault();
+    const btn=e.target.querySelector('button[type="submit"]');
+    if(btn.disabled) return;
+    btn.disabled=true; const label=btn.textContent; btn.textContent="Memproses...";
+    try{const {data,error}=await sb.auth.signUp({email:$("regEmail").value.trim(),password:$("regPass").value,options:{data:{full_name:$("regName").value.trim(),username:$("regUser").value.trim()}}});if(error)throw error;alert(data.session?"Akun dibuat dan sudah login.":"Akun dibuat. Cek email jika konfirmasi email aktif.");document.querySelector('.tab[data-auth="login"]').click();}
+    catch(err){fail(err);}
+    finally{btn.disabled=false; btn.textContent=label;}
+  });
   $("googleLoginBtn")?.addEventListener("click",()=>googleAuth().catch(fail));
   $("googleRegisterBtn")?.addEventListener("click",()=>googleAuth().catch(fail));
   document.querySelectorAll(".nav-item").forEach(x=>x.addEventListener("click",()=>go(x.dataset.page)));

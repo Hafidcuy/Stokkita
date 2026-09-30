@@ -65,7 +65,23 @@ Import langsung memakai link tidak dapat membaca spreadsheet privat tanpa autent
 
 ## 5. Google OAuth
 
-Untuk tombol Google bekerja, konfigurasi Google provider di Supabase Authentication dan Google Cloud OAuth Client. Tambahkan origin aplikasi lokal, misalnya `http://localhost`, dan callback URL yang ditampilkan di halaman Google provider Supabase.
+Untuk tombol Google bekerja, konfigurasi Google provider di Supabase Authentication dan Google Cloud OAuth Client.
+
+### Konfigurasi URL di Dashboard Supabase (wajib untuk deployment GitHub Pages)
+
+Login Google hanya akan mengembalikan user ke URL yang terdaftar di Supabase. Lakukan sekali saja:
+
+1. Buka [Supabase Dashboard](https://supabase.com/dashboard) → pilih project **stokkita**.
+2. Buka **Authentication** → **URL Configuration**.
+3. Isi **Site URL** dengan: `https://hafidcuy.github.io/Stokkita/`
+4. Di bagian **Redirect URLs**, klik **Add URL** lalu tambahkan:
+   - `https://hafidcuy.github.io/Stokkita/**`
+   - `http://localhost/**` (opsional, untuk uji lokal)
+5. Klik **Save**.
+
+Tanpa langkah ini, setelah memilih akun Google, user akan diarahkan ke URL Site URL lama (bukan ke aplikasi), sehingga login Google terlihat gagal.
+
+Untuk lokal, tambahkan origin aplikasi lokal, misalnya `http://localhost`, dan callback URL yang ditampilkan di halaman Google provider Supabase.
 
 Kode meminta scope read-only Google Sheets untuk akses spreadsheet.
 
