@@ -91,7 +91,7 @@ function render(){
   renderProducts($("allProducts"), filtered(), true);
   renderTransactions();
   const cats = [...new Set(products.map(p => p.kategori).filter(Boolean))], old = $("categoryFilter").value;
-  $("categoryFilter").innerHTML = '<option value="">Semua kategori</option>' + cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join("");
+  $("categoryFilter").innerHTML = '<option value="">Semua Kategori</option>' + cats.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join("");
   if(cats.includes(old)) $("categoryFilter").value = old;
   renderNotifications();
 }
@@ -264,7 +264,7 @@ function applyTheme(pref){
   document.documentElement.setAttribute("data-theme", resolveTheme(pref));
   document.querySelectorAll(".theme-option").forEach(b => b.classList.toggle("active", b.dataset.theme === pref));
 }
-let themePref = localStorage.getItem("stokita-theme") || "dark";
+let themePref = localStorage.getItem("stokita-theme") || "light";
 function openPasswordModal(){
   $("newPassword").value = ""; $("confirmPassword").value = "";
   $("passwordModal").classList.remove("hidden");
