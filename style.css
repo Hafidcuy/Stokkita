@@ -28,7 +28,8 @@
   --shadow:0 1px 2px rgba(16,24,40,.06);
 }
 
-[data-theme="dark"]{
+/* selector dibatasi ke <html> agar tombol pilihan tema (data-theme="dark") tidak ikut kena */
+html[data-theme="dark"]{
   --bg:#0F131A;
   --card:#171C25;
   --line:#252B36;
@@ -391,9 +392,9 @@ input[type="file"]{height:auto;padding:9px 11px;font-size:12.5px;border-style:da
 .panel.navy .status.empty{background:rgba(240,68,56,.2);color:#FFA8A3}
 .panel.navy .status.low{background:rgba(247,144,9,.2);color:#FFD08A}
 .panel.navy .status.safe{background:rgba(18,183,106,.2);color:#7EEBC0}
-[data-theme="dark"] .status.empty{background:rgba(240,68,56,.18);color:#FF9C94}
-[data-theme="dark"] .status.low{background:rgba(247,144,9,.18);color:#FFC46B}
-[data-theme="dark"] .status.safe{background:rgba(18,183,106,.18);color:#6EE7B0}
+html[data-theme="dark"] .status.empty{background:rgba(240,68,56,.18);color:#FF9C94}
+html[data-theme="dark"] .status.low{background:rgba(247,144,9,.18);color:#FFC46B}
+html[data-theme="dark"] .status.safe{background:rgba(18,183,106,.18);color:#6EE7B0}
 
 .panel.navy .product-row{border-bottom-color:rgba(255,255,255,.09)}
 .panel.navy .product-row:hover{background:rgba(255,255,255,.04)}
@@ -581,6 +582,8 @@ input[type="file"]{height:auto;padding:9px 11px;font-size:12.5px;border-style:da
 /* ---------------- Responsif ---------------- */
 @media (max-width:640px){
   .toolbar{flex-direction:column}
+  /* di arah kolom, flex-basis 240px jadi TINGGI — batalkan supaya kotak cari tidak melompong */
+  .toolbar .search-box{flex:0 0 auto;width:100%}
   .toolbar select,.toolbar .secondary-btn{width:100%}
 }
 @media (max-width:600px){
@@ -602,7 +605,7 @@ input[type="file"]{height:auto;padding:9px 11px;font-size:12.5px;border-style:da
   /* Pengaturan: label kiri, input & tombol pindah baris bawah */
   .settings-list{padding:3px 12px}
   .setting-row{gap:10px;padding:12px 4px;flex-wrap:wrap}
-  .setting-row input{width:100%;order:3;flex:1 1 100%;margin-left:46px}
+  .setting-row input{width:auto;order:3;flex:1 1 calc(100% - 46px);margin-left:46px}
   .setting-body{padding:4px 4px 14px}
   .setting-actions{flex-direction:column}
   .setting-actions .secondary-btn{flex:1 1 auto;min-width:0;width:100%}
@@ -620,7 +623,6 @@ input[type="file"]{height:auto;padding:9px 11px;font-size:12.5px;border-style:da
   .main-content{padding:16px 12px 112px}
   .bottom-nav{left:8px;right:8px}
   .row-actions button{width:36px;height:36px}
-  .setting-row input{margin-left:0}
 }
 
 @media (prefers-reduced-motion:reduce){
