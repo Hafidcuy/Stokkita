@@ -147,6 +147,8 @@ function go(page){
   document.querySelectorAll(".page").forEach(x => x.classList.add("hidden"));
   $(`page-${page}`).classList.remove("hidden");
   document.querySelectorAll(".nav-item").forEach(x => x.classList.toggle("active", x.dataset.page === page));
+  $("settingsBtn").classList.toggle("active", page === "settings");
+  if(page === "settings") refreshStorageInfo();
   $("sidebar").classList.remove("open");
   render();
 }
@@ -255,6 +257,84 @@ function exportCSV(){
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob); a.download = `stokita-produk-${new Date().toISOString().slice(0,10)}.csv`;
   document.body.appendChild(a); a.click(); a.remove();
+}
+/* ===== Pengaturan: cadangan, penyimpanan, instalasi app, reset ===== */
+function fmtBytes(n){
+  if(!Number.isFinite(n)) return "-";
+  const u = ["B","KB","MB","GB"]; let i = 0;
+  while(n >= 1024 && i < u.length - 1){ n /= 1024; i++; }
+  return `${i ? n.toFixed(1) : Math.round(n)} ${u[i]}`;
+}
+async function refreshStorageInfo(){
+  const el = $("storageInfo"); if(!el) return;
+  let bytes = 0;
+  try{ for(const k of localStorage) bytes += (k.length + (localStorage.getItem(k) || "").length) * 2; }catch(e){}
+  let usage = null, quota = null;
+  try{ if(navigator.storage?.estimate){ const e = await navigator.storage.estimate(); usage = e.usage; quota = e.quota; } }catch(e){}
+  let files = 0;
+  try{ for(const k of await caches.keys()) files += (await (await caches.open(k)).keys()).length; }catch(e){}
+  el.innerHTML = `Barang: <b>${products.length}</b> · Transaksi: <b>${transactions.length}</b><br>Data lokal: <b>${fmtBytes(bytes)}</b> · Cache: <b>${files} berkas</b>` +
+    (usage != null ? `<br>Penyimpanan browser: <b>${fmtBytes(usage)}</b> dari <b>${fmtBytes(quota)}</b>` : "");
+}
+async function clearCache(){
+  if(!confirm("Hapus cache aplikasi? Aplikasi akan diunduh ulang saat dibuka berikutnya.")) return;
+  try{ for(const k of await caches.keys()) await caches.delete(k); }catch(e){}
+  location.reload();
+}
+async function exportBackup(){
+  if(!products.length && !transactions.length) return alert("Belum ada data untuk dicadangkan.");
+  const pr = await sb.from("products").select("*"); if(pr.error) throw pr.error;
+  const tr = await sb.from("transactions").select("*"); if(tr.error) throw tr.error;
+  const data = {app:"Stokita", version:1, exported_at:new Date().toISOString(), products:pr.data || [], transactions:tr.data || []};
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = `stokita-cadangan-${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+}
+async function importBackup(file){
+  let data;
+  try{ data = JSON.parse(await file.text()); }catch(e){ return alert("File cadangan tidak valid (bukan JSON)."); }
+  if(!data || data.app !== "Stokita" || !Array.isArray(data.products)) return alert("File ini bukan cadangan Stokita.");
+  if(!confirm(`Impor ${data.products.length} barang dari cadangan?\nBarang dengan kode sama akan diperbarui, transaksi tidak diubah.`)) return;
+  const cols = ["kode","nama","kategori","harga","stok","satuan","supplier","deskripsi","image_url"];
+  const rows = data.products.map(p => {
+    const r = {user_id: currentUser.id};
+    cols.forEach(c => { if(p[c] !== undefined && p[c] !== null) r[c] = p[c]; });
+    return r;
+  }).filter(r => r.kode && r.nama);
+  if(!rows.length) return alert("Cadangan tidak berisi barang yang valid.");
+  for(let i = 0; i < rows.length; i += 100){
+    const {error} = await sb.from("products").upsert(rows.slice(i,i+100), {onConflict:"user_id,kode"});
+    if(error) throw error;
+  }
+  await loadData();
+  alert(`${rows.length} barang berhasil diimpor.`);
+}
+async function factoryReset(){
+  if(prompt('Ketik "RESET" untuk melanjutkan:') !== "RESET") return alert("Dibatalkan.");
+  if(!confirm("SEMUA barang dan transaksi akan dihapus permanen. Lanjutkan?")) return;
+  const pr = await sb.from("products").select("id"); if(pr.error) throw pr.error;
+  const pids = (pr.data || []).map(x => x.id);
+  if(pids.length){
+    const tr = await sb.from("transactions").select("id").in("product_id", pids); if(tr.error) throw tr.error;
+    const tids = (tr.data || []).map(x => x.id);
+    for(let i = 0; i < tids.length; i += 100){
+      const {error} = await sb.from("transactions").delete().in("id", tids.slice(i,i+100));
+      if(error) throw error;
+    }
+    for(let i = 0; i < pids.length; i += 100){
+      const {error} = await sb.from("products").delete().in("id", pids.slice(i,i+100));
+      if(error) throw error;
+    }
+  }
+  ["stokita-low-stock","stokita-kode-format","stokita-theme"].forEach(k => localStorage.removeItem(k));
+  location.reload();
+}
+let installPrompt = null;
+window.addEventListener("beforeinstallprompt", e => { e.preventDefault(); installPrompt = e; });
+function installApp(){
+  if(installPrompt){ installPrompt.prompt(); installPrompt.userChoice.finally(() => { installPrompt = null; }); }
+  else alert('Pasang Stokita sebagai aplikasi:\n\n• Android/Chrome: menu ⋮ → "Pasang aplikasi" / "Tambahkan ke layar utama"\n• iPhone/Safari: tombol Bagikan → "Tambahkan ke Layar Utama"');
 }
 function resolveTheme(pref){
   if(pref === "dark" || pref === "light") return pref;
@@ -386,6 +466,14 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.addEventListener("click",e=>{if(!e.target.closest(".notif-wrap"))$("notifPanel").classList.add("hidden");});
   $("closeModal").addEventListener("click",()=>$("productModal").classList.add("hidden")); $("closeDetail").addEventListener("click",()=>$("detailModal").classList.add("hidden")); $("closeTransaction").addEventListener("click",()=>$("transactionModal").classList.add("hidden"));
   $("profileRow").addEventListener("click",openProfileModal); $("sheetSettingRow").addEventListener("click",()=>go("dashboard"));
+  $("settingsBtn").addEventListener("click",()=>go("settings"));
+  $("exportBackupBtn").addEventListener("click",()=>exportBackup().catch(fail));
+  $("importBackupBtn").addEventListener("click",()=>$("backupFile").click());
+  $("backupFile").addEventListener("change",e=>{const f=e.target.files[0]; e.target.value=""; if(f) importBackup(f).catch(fail);});
+  $("clearCacheBtn").addEventListener("click",()=>clearCache().catch(fail));
+  $("resetRow").addEventListener("click",()=>factoryReset().catch(fail));
+  $("installBtn").addEventListener("click",installApp);
+  document.querySelectorAll(".setting-details").forEach(d=>d.addEventListener("toggle",()=>{ if(d.open) refreshStorageInfo(); }));
   $("closeProfileModal").addEventListener("click",()=>$("profileModal").classList.add("hidden"));
   $("profileForm").addEventListener("submit",e=>saveProfile(e).catch(fail));
   $("productForm").addEventListener("submit",e=>saveProduct(e).catch(fail)); $("transactionForm").addEventListener("submit",e=>saveTransaction(e).catch(fail)); $("connectSheet").addEventListener("click",()=>connectSheet().catch(fail)); $("importSheet").addEventListener("click",()=>importSpreadsheet().catch(fail));
