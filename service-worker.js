@@ -5,7 +5,7 @@
    - Aset statis (ikon, gambar, manifest) memakai stale-while-revalidate.
    - Request lintas origin (Supabase, Google Fonts) dibiarkan langsung. */
 
-const VERSION = "v6";
+const VERSION = "v7";
 const CACHE = "stokita-cache-" + VERSION;
 
 const PRECACHE = [

@@ -81,6 +81,9 @@ async function loadData(){
   if(p?.spreadsheet_url) $("sheetUrl").value = p.spreadsheet_url;
   dataLoadedFor = currentUser.id;
   render();
+  /* PWA: dukung pintasan (shortcut manifest) ?page=products | ?page=transactions */
+  const deep = new URLSearchParams(location.search).get("page");
+  if(deep && $("page-" + deep)) go(deep);
 }
 function render(){
   $("statTotal").textContent = products.length;

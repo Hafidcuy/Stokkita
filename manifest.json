@@ -12,6 +12,22 @@
   "theme_color": "#1E2D51",
   "background_color": "#1E2D51",
   "categories": ["productivity", "business"],
+  "shortcuts": [
+    {
+      "name": "Daftar Barang",
+      "short_name": "Barang",
+      "description": "Kelola barang & stok inventaris.",
+      "url": "./?page=products",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Transaksi Stok",
+      "short_name": "Transaksi",
+      "description": "Catat stok masuk dan stok keluar.",
+      "url": "./?page=transactions",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ],
   "icons": [
     {
       "src": "./icon-192.png",

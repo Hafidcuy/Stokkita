@@ -107,3 +107,33 @@ README.md
 URL final: `https://hafidcuy.github.io/`
 
 Jika repository memakai nama lain, URL Pages biasanya menjadi `https://hafidcuy.github.io/NAMA-REPOSITORY/`.
+
+
+## 8. PWA (Progressive Web App)
+
+Stokita sudah terpasang sebagai PWA dan bisa dipasang seperti aplikasi biasa di HP/desktop.
+
+**Komponen yang aktif**
+
+| Bagian | Isi |
+|---|---|
+| `manifest.json` | nama, `display: standalone`, `start_url`/`scope` `./`, warna tema `#1E2D51`, ikon 192 & 512 (+ maskable), `shortcuts` "Daftar Barang" & "Transaksi Stok" |
+| `service-worker.js` (v7) | app shell di-cache → **buka offline**; HTML/JS/CSS *network-first* (update GitHub Pages langsung terpakai), aset statis *stale-while-revalidate*, request Supabase/Google Fonts lewat langsung |
+| `<head>` | `link rel=manifest`, `theme-color`, `apple-touch-icon`, `apple-mobile-web-app-capable` |
+| Pengaturan → Tentang Aplikasi | tombol **Pasang Aplikasi** (menangkap `beforeinstallprompt` + panduan iOS) |
+
+**Cara memasang**
+
+- **Android (Chrome)**: buka situs → menu ⋮ → **Pasang aplikasi** / **Tambahkan ke layar utama**. Atau: Pengaturan → Tentang Aplikasi → Pasang.
+- **iPhone (Safari)**: tombol **Bagikan** → **Tambahkan ke Layar Utama**.
+- **Desktop (Chrome/Edge)**: ikon pasang di ujung address bar, atau menu ⋮ → Pasang Stokita.
+
+**Perilaku offline**
+
+- Shell aplikasi (halaman, CSS, JS, ikon) tampil tanpa internet.
+- Data barang/transaksi tetap butuh koneksi ke Supabase; jika offline, proses simpan akan gagal dengan pesan error.
+- Saat versi cache berubah (mis. `v7`), service worker menghapus cache lama otomatis.
+
+**Pintasan (shortcut)**: tekan lama ikon aplikasi (Android) → "Daftar Barang" / "Transaksi Stok" langsung membuka halaman itu (`?page=products` / `?page=transactions`).
+
+**Cara verifikasi**: DevTools → *Application* → *Manifest* & *Service Workers*, atau jalankan Lighthouse → audit PWA.
