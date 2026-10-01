@@ -457,7 +457,7 @@ input[type="file"]{height:auto;padding:10px 12px;font-size:12.5px;border-style:d
   box-shadow:4px 4px 0 var(--ink);
 }
 html[data-theme="dark"] .panel.navy{background:#2A1668}
-.dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;align-items:start}
+.dashboard-grid{display:grid;grid-template-columns:1fr;gap:15px;align-items:start}
 .dashboard-grid>.panel{margin-bottom:0}
 .panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
 .panel-head h3{font-size:15.5px;font-weight:800}
@@ -588,6 +588,8 @@ html[data-theme="dark"] .sheet-actions .secondary-btn:hover{background:#F1EBFF}
 .setting-row:last-child{border-bottom:0}
 .setting-row[id]{cursor:pointer}
 .setting-row[id]:hover{background:var(--violet-soft)}
+.setting-row[data-goto]{cursor:pointer}
+.setting-row[data-goto]:hover{background:var(--violet-soft)}
 .setting-icon{
   width:38px;height:38px;flex:none;border-radius:12px;
   background:var(--violet-soft);color:var(--violet-2);
@@ -641,6 +643,32 @@ html[data-theme="dark"] .bottom-nav .nav-item.active{color:#6D28D9}
 .terms[open]>summary::before{transform:rotate(90deg)}
 .terms p{margin:8px 0 0;font-size:11.5px;line-height:1.7;color:var(--tx-2)}
 .settings-footer{text-align:center;font-size:11.5px;color:var(--tx-3);margin:24px 0 8px}
+
+/* ---------------- Sub-halaman pengaturan (pindah halaman, bukan popup) ---------------- */
+.subpage-head{display:flex;align-items:center;gap:13px;margin-bottom:18px}
+.back-btn{
+  width:42px;height:42px;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--card);border:1.5px solid var(--ink);border-radius:13px;
+  color:var(--violet-2);box-shadow:2px 2px 0 var(--ink);transition:.12s;
+}
+.back-btn:hover{background:var(--violet-soft);transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.back-btn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 var(--ink)}
+.back-btn .ic{width:18px;height:18px}
+.subpage-head h2{font-size:24px;font-weight:800;letter-spacing:-.03em;color:var(--tx);line-height:1.15}
+.subpage-head p{margin-top:4px;font-size:12.5px;color:var(--tx-2)}
+.subpage-panel{display:flex;flex-direction:column;gap:12px;max-width:680px;padding:18px}
+.settings-list.subpage-panel{padding:16px}
+.sheet-panel.subpage-panel{padding:18px}
+.subpage-form{display:flex;flex-direction:column}
+.subpage-form label{margin-bottom:6px}
+.subpage-form input{margin-bottom:13px}
+.subpage-form .primary-btn{width:100%;margin-top:2px}
+.subpage-label{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--orange-2);
+}
+.subpage-label .ic{width:15px;height:15px}
 
 /* ---------------- Bottom nav (mobile) ---------------- */
 .bottom-nav{display:none}

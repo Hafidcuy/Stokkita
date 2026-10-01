@@ -41,6 +41,7 @@
     <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><path d="M12 15V3"/></symbol>
     <symbol id="i-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><path d="M12 3v12"/></symbol>
     <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></symbol>
     <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></symbol>
     <symbol id="i-check-circle" viewBox="0 0 24 24"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></symbol>
     <symbol id="i-alert-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></symbol>
@@ -227,15 +228,6 @@
             <div class="panel-head"><h3>Barang Terbaru</h3><button class="text-btn" data-page="products">Lihat Semua <svg class="ic"><use href="#i-arrow-right"/></svg></button></div>
             <div id="recentProducts" class="product-list"></div>
           </div>
-
-          <div class="panel sheet-panel">
-            <div class="sheet-icon"><svg class="ic"><use href="#i-file-spreadsheet"/></svg></div>
-            <h3>Hubungkan Google Spreadsheet</h3>
-            <p>Masukkan link spreadsheet Anda untuk mengimpor data inventaris.</p>
-            <input id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/...">
-            <div class="sheet-actions"><button id="connectSheet" class="primary-btn"><svg class="ic"><use href="#i-link"/></svg> Simpan Link</button><button id="importSheet" class="secondary-btn"><svg class="ic"><use href="#i-download"/></svg> Import Data</button></div>
-            <div id="sheetStatus" class="sheet-status"><svg class="ic"><use href="#i-check-circle"/></svg> Data dapat diimpor dari spreadsheet Anda<br><svg class="ic"><use href="#i-check-circle"/></svg> Dapat diimpor ke sistem inventaris<br><svg class="ic"><use href="#i-check-circle"/></svg> Data dapat diimpor ulang kapan saja</div>
-          </div>
         </div>
       </div>
 
@@ -289,17 +281,7 @@
         <div class="panel settings-list">
           <div class="setting-row" id="profileRow"><span class="setting-icon"><svg class="ic"><use href="#i-user"/></svg></span><div><b id="profileName">Admin</b><small id="profileEmail">-</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
           <div class="setting-row" id="sheetSettingRow"><span class="setting-icon"><svg class="ic"><use href="#i-file-spreadsheet"/></svg></span><div><b>Google Spreadsheet</b><small id="settingsSheetStatus">Belum terhubung</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
-          <details class="setting-details">
-            <summary class="setting-row"><span class="setting-icon"><svg class="ic"><use href="#i-upload"/></svg></span><div><b>Kirim ke Spreadsheet</b><small>Kirim barang &amp; transaksi, langsung tertata rapi</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></summary>
-            <div class="setting-body">
-              <input id="gsUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" spellcheck="false" autocomplete="off">
-              <p class="setting-note" id="sheetSyncStatus">Isi dulu URL Web App Google Apps Script (petunjuk setup ada di repo: <b>SETUP_GOOGLE_SHEET.md</b>). Tersimpan di perangkat ini.</p>
-              <div class="setting-actions">
-                <button type="button" class="secondary-btn" id="sendSheetBtn"><svg class="ic"><use href="#i-upload"/></svg> Kirim Data</button>
-                <button type="button" class="secondary-btn" id="testSheetBtn"><svg class="ic"><use href="#i-link"/></svg> Uji Koneksi</button>
-              </div>
-            </div>
-          </details>
+          <div class="setting-row" data-goto="set-sheet"><span class="setting-icon"><svg class="ic"><use href="#i-upload"/></svg></span><div><b>Kirim ke Spreadsheet</b><small>Kirim barang &amp; transaksi, langsung tertata rapi</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
           <div class="setting-row" style="cursor:default"><span class="setting-icon"><svg class="ic"><use href="#i-barcode"/></svg></span><div><b>Format Kode Barang</b><small>Awalan kode otomatis (BRG → BRG001). Kosong = ikuti kode lama</small></div><input id="kodeFormat" type="text" maxlength="20" placeholder="BRG" spellcheck="false" autocomplete="off"></div>
           <div class="setting-row" style="cursor:default"><span class="setting-icon"><svg class="ic"><use href="#i-trending-down"/></svg></span><div><b>Batas Stok Menipis</b><small>Tandai barang "Menipis" jika stok ≤ nilai ini</small></div><input id="lowStockThreshold" type="number" min="1" step="1"></div>
         </div>
@@ -308,41 +290,11 @@
         <div class="panel settings-list">
           <div class="setting-row" id="passwordRow"><span class="setting-icon"><svg class="ic"><use href="#i-lock"/></svg></span><div><b>Kata Sandi Masuk</b><small>Perbarui kata sandi akun Anda</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
 
-          <details class="setting-details">
-            <summary class="setting-row"><span class="setting-icon"><svg class="ic"><use href="#i-database"/></svg></span><div><b>Data &amp; Cadangan</b><small>Ekspor atau pulihkan cadangan data (JSON)</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></summary>
-            <div class="setting-body">
-              <div class="setting-actions">
-                <button type="button" class="secondary-btn" id="exportBackupBtn"><svg class="ic"><use href="#i-file-down"/></svg> Ekspor Cadangan</button>
-                <button type="button" class="secondary-btn" id="importBackupBtn"><svg class="ic"><use href="#i-upload"/></svg> Impor Cadangan</button>
-                <input type="file" id="backupFile" accept="application/json,.json" class="hidden">
-              </div>
-              <p class="setting-note">Cadangan berisi daftar barang dan transaksi. Impor akan menambah barang baru dan memperbarui barang dengan kode yang sama; transaksi tidak diubah.</p>
-            </div>
-          </details>
+          <div class="setting-row" data-goto="set-data"><span class="setting-icon"><svg class="ic"><use href="#i-database"/></svg></span><div><b>Data &amp; Cadangan</b><small>Ekspor atau pulihkan cadangan data (JSON)</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
 
-          <details class="setting-details">
-            <summary class="setting-row"><span class="setting-icon"><svg class="ic"><use href="#i-layers"/></svg></span><div><b>Manajemen Penyimpanan</b><small>Cek dan bersihkan penyimpanan aplikasi</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></summary>
-            <div class="setting-body">
-              <p class="setting-note" id="storageInfo">Memuat info penyimpanan...</p>
-              <div class="setting-actions">
-                <button type="button" class="secondary-btn" id="clearCacheBtn"><svg class="ic"><use href="#i-trash-2"/></svg> Bersihkan Cache</button>
-              </div>
-            </div>
-          </details>
+          <div class="setting-row" data-goto="set-storage"><span class="setting-icon"><svg class="ic"><use href="#i-layers"/></svg></span><div><b>Manajemen Penyimpanan</b><small>Cek dan bersihkan penyimpanan aplikasi</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
 
-          <details class="setting-details">
-            <summary class="setting-row"><span class="setting-icon"><svg class="ic"><use href="#i-info"/></svg></span><div><b>Tentang Aplikasi &amp; S&amp;K</b><small>Stokita v1.0 · Sistem Inventaris Barang</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></summary>
-            <div class="setting-body">
-              <p class="setting-note">Stokita dapat dipasang sebagai aplikasi di perangkat Anda agar terasa seperti aplikasi native (layar penuh, bisa dibuka tanpa browser).</p>
-              <div class="setting-actions">
-                <button type="button" class="secondary-btn" id="installBtn"><svg class="ic"><use href="#i-download"/></svg> Pasang Aplikasi</button>
-              </div>
-              <details class="terms">
-                <summary>Syarat &amp; Ketentuan</summary>
-                <p>Data Stokita tersimpan di cloud (Supabase) dan terikat pada akun Anda. Cadangan data sepenuhnya tanggung jawab pengguna. Stokita dipakai untuk pengelolaan inventaris internal dan bukan untuk keperluan ilegal apa pun.</p>
-              </details>
-            </div>
-          </details>
+          <div class="setting-row" data-goto="set-about"><span class="setting-icon"><svg class="ic"><use href="#i-info"/></svg></span><div><b>Tentang Aplikasi &amp; S&amp;K</b><small>Stokita v1.0 · Sistem Inventaris Barang</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
 
           <div class="setting-row danger" id="resetRow"><span class="setting-icon"><svg class="ic"><use href="#i-rotate-ccw"/></svg></span><div><b>Reset Pabrik</b><small>Hapus semua data &amp; kembalikan ke kondisi awal</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
 
@@ -351,6 +303,110 @@
 
         <div class="settings-footer">Stokita · Dibuat oleh <b>Kelompok 1</b> · © 2026</div>
       </div>
+
+      <!-- SUB-HALAMAN PENGATURAN (dibuka sebagai halaman, bukan popup) -->
+      <div id="page-set-profile" class="page hidden">
+        <div class="subpage-head">
+          <button class="back-btn" data-back aria-label="Kembali ke Pengaturan"><svg class="ic"><use href="#i-arrow-left"/></svg></button>
+          <div><h2>Edit Profil</h2><p>Perbarui nama lengkap dan username Anda.</p></div>
+        </div>
+        <div class="panel subpage-panel">
+          <form id="profileForm" class="subpage-form">
+            <label for="profileFullName">Nama lengkap</label>
+            <input id="profileFullName" required placeholder="Nama lengkap">
+            <label for="profileUsername">Username</label>
+            <input id="profileUsername" placeholder="Username">
+            <button class="primary-btn" type="submit">Simpan Profil</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="page-set-password" class="page hidden">
+        <div class="subpage-head">
+          <button class="back-btn" data-back aria-label="Kembali ke Pengaturan"><svg class="ic"><use href="#i-arrow-left"/></svg></button>
+          <div><h2>Kata Sandi Masuk</h2><p>Perbarui kata sandi akun Anda.</p></div>
+        </div>
+        <div class="panel subpage-panel">
+          <form id="passwordForm" class="subpage-form">
+            <label for="newPassword">Password baru</label>
+            <input id="newPassword" type="password" minlength="6" required placeholder="Minimal 6 karakter">
+            <label for="confirmPassword">Konfirmasi password baru</label>
+            <input id="confirmPassword" type="password" minlength="6" required placeholder="Ulangi password baru">
+            <button class="primary-btn" type="submit">Simpan Password</button>
+          </form>
+        </div>
+      </div>
+
+      <div id="page-set-sheet" class="page hidden">
+        <div class="subpage-head">
+          <button class="back-btn" data-back aria-label="Kembali ke Pengaturan"><svg class="ic"><use href="#i-arrow-left"/></svg></button>
+          <div><h2>Google Spreadsheet</h2><p>Impor data dari dan kirim data ke spreadsheet Anda.</p></div>
+        </div>
+
+        <div class="panel sheet-panel">
+          <div class="sheet-icon"><svg class="ic"><use href="#i-file-spreadsheet"/></svg></div>
+          <h3>Impor dari Spreadsheet</h3>
+          <p>Masukkan link spreadsheet Anda untuk mengimpor data inventaris.</p>
+          <input id="sheetUrl" placeholder="https://docs.google.com/spreadsheets/d/...">
+          <div class="sheet-actions"><button id="connectSheet" class="primary-btn"><svg class="ic"><use href="#i-link"/></svg> Simpan Link</button><button id="importSheet" class="secondary-btn"><svg class="ic"><use href="#i-download"/></svg> Import Data</button></div>
+          <div id="sheetStatus" class="sheet-status"><svg class="ic"><use href="#i-check-circle"/></svg> Data dapat diimpor dari spreadsheet Anda<br><svg class="ic"><use href="#i-check-circle"/></svg> Dapat diimpor ke sistem inventaris<br><svg class="ic"><use href="#i-check-circle"/></svg> Data dapat diimpor ulang kapan saja</div>
+        </div>
+
+        <div class="panel settings-list subpage-panel">
+          <div class="subpage-label"><svg class="ic"><use href="#i-upload"/></svg> Kirim ke Spreadsheet</div>
+          <input id="gsUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" spellcheck="false" autocomplete="off">
+          <p class="setting-note" id="sheetSyncStatus">Isi dulu URL Web App Google Apps Script (petunjuk setup ada di repo: <b>SETUP_GOOGLE_SHEET.md</b>). Tersimpan di perangkat ini.</p>
+          <div class="setting-actions">
+            <button type="button" class="secondary-btn" id="sendSheetBtn"><svg class="ic"><use href="#i-upload"/></svg> Kirim Data</button>
+            <button type="button" class="secondary-btn" id="testSheetBtn"><svg class="ic"><use href="#i-link"/></svg> Uji Koneksi</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-set-data" class="page hidden">
+        <div class="subpage-head">
+          <button class="back-btn" data-back aria-label="Kembali ke Pengaturan"><svg class="ic"><use href="#i-arrow-left"/></svg></button>
+          <div><h2>Data &amp; Cadangan</h2><p>Ekspor atau pulihkan cadangan data (JSON).</p></div>
+        </div>
+        <div class="panel settings-list subpage-panel">
+          <div class="setting-actions">
+            <button type="button" class="secondary-btn" id="exportBackupBtn"><svg class="ic"><use href="#i-file-down"/></svg> Ekspor Cadangan</button>
+            <button type="button" class="secondary-btn" id="importBackupBtn"><svg class="ic"><use href="#i-upload"/></svg> Impor Cadangan</button>
+            <input type="file" id="backupFile" accept="application/json,.json" class="hidden">
+          </div>
+          <p class="setting-note">Cadangan berisi daftar barang dan transaksi. Impor akan menambah barang baru dan memperbarui barang dengan kode yang sama; transaksi tidak diubah.</p>
+        </div>
+      </div>
+
+      <div id="page-set-storage" class="page hidden">
+        <div class="subpage-head">
+          <button class="back-btn" data-back aria-label="Kembali ke Pengaturan"><svg class="ic"><use href="#i-arrow-left"/></svg></button>
+          <div><h2>Manajemen Penyimpanan</h2><p>Cek dan bersihkan penyimpanan aplikasi.</p></div>
+        </div>
+        <div class="panel settings-list subpage-panel">
+          <p class="setting-note" id="storageInfo">Memuat info penyimpanan...</p>
+          <div class="setting-actions">
+            <button type="button" class="secondary-btn" id="clearCacheBtn"><svg class="ic"><use href="#i-trash-2"/></svg> Bersihkan Cache</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-set-about" class="page hidden">
+        <div class="subpage-head">
+          <button class="back-btn" data-back aria-label="Kembali ke Pengaturan"><svg class="ic"><use href="#i-arrow-left"/></svg></button>
+          <div><h2>Tentang Aplikasi &amp; S&amp;K</h2><p>Stokita v1.0 · Sistem Inventaris Barang.</p></div>
+        </div>
+        <div class="panel settings-list subpage-panel">
+          <p class="setting-note">Stokita dapat dipasang sebagai aplikasi di perangkat Anda agar terasa seperti aplikasi native (layar penuh, bisa dibuka tanpa browser).</p>
+          <div class="setting-actions">
+            <button type="button" class="secondary-btn" id="installBtn"><svg class="ic"><use href="#i-download"/></svg> Pasang Aplikasi</button>
+          </div>
+          <details class="terms">
+            <summary>Syarat &amp; Ketentuan</summary>
+            <p>Data Stokita tersimpan di cloud (Supabase) dan terikat pada akun Anda. Cadangan data sepenuhnya tanggung jawab pengguna. Stokita dipakai untuk pengelolaan inventaris internal dan bukan untuk keperluan ilegal apa pun.</p>
+          </details>
+        </div>
+      </div>
     </main>
 
     <!-- BOTTOM NAV (mobile) -->
@@ -358,6 +414,7 @@
       <button class="nav-item active" data-page="dashboard"><svg class="ic"><use href="#i-layout-dashboard"/></svg><span>Beranda</span></button>
       <button class="nav-item" data-page="products"><svg class="ic"><use href="#i-package"/></svg><span>Barang</span></button>
       <button class="nav-item" data-page="transactions"><svg class="ic"><use href="#i-arrow-left-right"/></svg><span>Transaksi</span></button>
+      <button class="nav-item" data-page="settings"><svg class="ic"><use href="#i-settings"/></svg><span>Pengaturan</span></button>
     </nav>
   </section>
 
@@ -386,34 +443,6 @@
         <label>Deskripsi</label>
         <textarea id="deskripsi" placeholder="Deskripsi barang"></textarea>
         <button class="primary-btn" type="submit">Simpan Barang</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- PROFILE MODAL -->
-  <div id="profileModal" class="modal hidden">
-    <div class="modal-card">
-      <div class="modal-head"><h2>Edit Profil</h2><button id="closeProfileModal" aria-label="Tutup"><svg class="ic"><use href="#i-x"/></svg></button></div>
-      <form id="profileForm">
-        <label>Nama lengkap</label>
-        <input id="profileFullName" required placeholder="Nama lengkap">
-        <label>Username</label>
-        <input id="profileUsername" placeholder="Username">
-        <button class="primary-btn" type="submit">Simpan Profil</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- PASSWORD MODAL -->
-  <div id="passwordModal" class="modal hidden">
-    <div class="modal-card">
-      <div class="modal-head"><h2>Ubah Password</h2><button id="closePasswordModal" aria-label="Tutup"><svg class="ic"><use href="#i-x"/></svg></button></div>
-      <form id="passwordForm">
-        <label>Password baru</label>
-        <input id="newPassword" type="password" minlength="6" required placeholder="Minimal 6 karakter">
-        <label>Konfirmasi password baru</label>
-        <input id="confirmPassword" type="password" minlength="6" required placeholder="Ulangi password baru">
-        <button class="primary-btn" type="submit">Simpan Password</button>
       </form>
     </div>
   </div>

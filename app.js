@@ -147,12 +147,16 @@ function renderTransactions(){
   }).join("");
 }
 function go(page){
+  if(!$("page-" + page)) page = "dashboard";
   document.querySelectorAll(".page").forEach(x => x.classList.add("hidden"));
   $(`page-${page}`).classList.remove("hidden");
-  document.querySelectorAll(".nav-item").forEach(x => x.classList.toggle("active", x.dataset.page === page));
-  $("settingsBtn").classList.toggle("active", page === "settings");
-  if(page === "settings") refreshStorageInfo();
+  const navPage = page.startsWith("set-") ? "settings" : page;
+  document.querySelectorAll(".nav-item").forEach(x => x.classList.toggle("active", x.dataset.page === navPage));
+  $("settingsBtn").classList.toggle("active", navPage === "settings");
+  if(navPage === "settings") refreshStorageInfo();
   $("sidebar").classList.remove("open");
+  $("notifPanel").classList.add("hidden");
+  window.scrollTo(0, 0);
   render();
 }
 // Kode barang otomatis: lanjut dari angka terbesar yang sudah ada (mis. BRG005 -> BRG006)
@@ -240,15 +244,15 @@ async function saveTransaction(e){
 function openProfileModal(){
   $("profileFullName").value = currentProfile?.full_name || "";
   $("profileUsername").value = currentProfile?.username || "";
-  $("profileModal").classList.remove("hidden");
+  go("set-profile");
 }
 async function saveProfile(e){
   e.preventDefault();
   const full_name = $("profileFullName").value.trim(), username = $("profileUsername").value.trim();
   const {error} = await sb.from("profiles").update({full_name, username: username || null}).eq("id", currentUser.id);
   if(error) throw error;
-  $("profileModal").classList.add("hidden");
   await loadData();
+  go("settings");
 }
 function exportCSV(){
   if(!filtered().length) return alert("Tidak ada data untuk diekspor.");
@@ -374,7 +378,7 @@ function applyTheme(pref){
 let themePref = localStorage.getItem("stokita-theme") || "light";
 function openPasswordModal(){
   $("newPassword").value = ""; $("confirmPassword").value = "";
-  $("passwordModal").classList.remove("hidden");
+  go("set-password");
 }
 async function savePassword(e){
   e.preventDefault();
@@ -383,7 +387,7 @@ async function savePassword(e){
   if(p1 !== p2) return alert("Konfirmasi password tidak cocok.");
   const {error} = await sb.auth.updateUser({password: p1});
   if(error) throw error;
-  $("passwordModal").classList.add("hidden");
+  go("settings");
   alert("Password berhasil diperbarui.");
 }
 async function connectSheet(){
@@ -485,14 +489,15 @@ document.addEventListener("DOMContentLoaded",()=>{
   $("kodeFormat").addEventListener("input",()=>{ codeFormat = $("kodeFormat").value.trim(); localStorage.setItem("stokita-kode-format", codeFormat); });
   $("kodeFormat").addEventListener("change",()=>{ $("kodeFormat").value = codeFormat; });
   $("passwordRow").addEventListener("click",openPasswordModal);
-  $("closePasswordModal").addEventListener("click",()=>$("passwordModal").classList.add("hidden"));
   $("passwordForm").addEventListener("submit",e=>savePassword(e).catch(fail));
-  $("sheetSidebarBtn").addEventListener("click",()=>go("dashboard")); $("searchInput").addEventListener("input",render); $("categoryFilter").addEventListener("change",render);
+  $("sheetSidebarBtn").addEventListener("click",()=>go("set-sheet")); $("searchInput").addEventListener("input",render); $("categoryFilter").addEventListener("change",render);
   $("exportCsvBtn").addEventListener("click",exportCSV);
   $("notifBtn").addEventListener("click",e=>{e.stopPropagation();$("notifPanel").classList.toggle("hidden");});
   document.addEventListener("click",e=>{if(!e.target.closest(".notif-wrap"))$("notifPanel").classList.add("hidden");});
   $("closeModal").addEventListener("click",()=>$("productModal").classList.add("hidden")); $("closeDetail").addEventListener("click",()=>$("detailModal").classList.add("hidden")); $("closeTransaction").addEventListener("click",()=>$("transactionModal").classList.add("hidden"));
-  $("profileRow").addEventListener("click",openProfileModal); $("sheetSettingRow").addEventListener("click",()=>go("dashboard"));
+  $("profileRow").addEventListener("click",openProfileModal); $("sheetSettingRow").addEventListener("click",()=>go("set-sheet"));
+  document.querySelectorAll("[data-goto]").forEach(x=>x.addEventListener("click",()=>go(x.dataset.goto)));
+  document.querySelectorAll("[data-back]").forEach(x=>x.addEventListener("click",()=>go("settings")));
   $("settingsBtn").addEventListener("click",()=>go("settings"));
   $("exportBackupBtn").addEventListener("click",()=>exportBackup().catch(fail));
   $("importBackupBtn").addEventListener("click",()=>$("backupFile").click());
@@ -508,8 +513,6 @@ document.addEventListener("DOMContentLoaded",()=>{
   });
   $("sendSheetBtn").addEventListener("click",()=>sendSheet().catch(fail));
   $("testSheetBtn").addEventListener("click",()=>testSheet().catch(fail));
-  document.querySelectorAll(".setting-details").forEach(d=>d.addEventListener("toggle",()=>{ if(d.open) refreshStorageInfo(); }));
-  $("closeProfileModal").addEventListener("click",()=>$("profileModal").classList.add("hidden"));
   $("profileForm").addEventListener("submit",e=>saveProfile(e).catch(fail));
   $("productForm").addEventListener("submit",e=>saveProduct(e).catch(fail)); $("transactionForm").addEventListener("submit",e=>saveTransaction(e).catch(fail)); $("connectSheet").addEventListener("click",()=>connectSheet().catch(fail)); $("importSheet").addEventListener("click",()=>importSpreadsheet().catch(fail));
   $("logoutBtn").addEventListener("click",async()=>{const {error}=await sb.auth.signOut();if(error)fail(error);});
