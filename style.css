@@ -8,20 +8,20 @@
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
-  --bg:#FAFAFA;
+  --bg:#F8FAFC;
   --card:#FFFFFF;
-  --tile:#F4F4F5;
-  --line:#E5E5E5;
-  --line-strong:#D4D4D4;
-  --accent:#171717;
-  --accent-hover:#3D3D3D;
+  --tile:#F1F5F9;
+  --line:#E2E8F0;
+  --line-strong:#CBD5E1;
+  --accent:#0F172A;
+  --accent-hover:#1E293B;
   --on-accent:#FFFFFF;
-  --tx:#171717;
-  --tx-2:#525252;
-  --tx-3:#737373;
-  --green:#0B7A46;
-  --red:#D92D20;
-  --amber:#B54708;
+  --tx:#0F172A;
+  --tx-2:#475569;
+  --tx-3:#64748B;
+  --green:#059669;
+  --red:#DC2626;
+  --amber:#D97706;
   --radius:12px;
   --shadow:0 1px 2px rgba(0,0,0,.05);
   --shadow-lift:0 3px 8px rgba(0,0,0,.09);
@@ -430,7 +430,7 @@ input[type="file"]{height:auto;padding:10px 12px;font-size:12.5px;border-style:d
   padding:17px;box-shadow:var(--shadow);margin-bottom:17px;
 }
 .panel.navy{
-  background:#171717;border-color:#171717;color:#fff;
+  background:#0F172A;border-color:#0F172A;color:#fff;
   box-shadow:0 1px 3px rgba(0,0,0,.2);
 }
 html[data-theme="dark"] .panel.navy{background:#0D0D0D;border-color:#2A2A2A}
