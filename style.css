@@ -1,8 +1,7 @@
 /* ============================================================
-   Stokita — "Netral"
-   Hitam putih abu-abu: satu aksen gelap untuk aksi, kartu putih
-   dengan border tipis dan bayangan halus. Tanpa gradient,
-   tanpa warna mencolok (warna status hanya untuk stok).
+   Stokita — Sesuai Desain Figma Kelompok 1
+   Palet: Navy Gelap (#1A2942), Aksen Biru (#2563EB), Kartu Putih (#FFFFFF),
+   Background Halaman (#F8FAFC)
    ============================================================ */
 
 *{margin:0;padding:0;box-sizing:border-box}
@@ -13,8 +12,10 @@
   --tile:#F1F5F9;
   --line:#E2E8F0;
   --line-strong:#CBD5E1;
-  --accent:#0F172A;
-  --accent-hover:#1E293B;
+  --navy:#1A2942;
+  --navy-dark:#131F33;
+  --accent:#2563EB;
+  --accent-hover:#1D4ED8;
   --on-accent:#FFFFFF;
   --tx:#0F172A;
   --tx-2:#475569;
@@ -23,32 +24,33 @@
   --red:#DC2626;
   --amber:#D97706;
   --radius:12px;
-  --shadow:0 1px 2px rgba(0,0,0,.05);
-  --shadow-lift:0 3px 8px rgba(0,0,0,.09);
-  --ring:rgba(23,23,23,.14);
+  --shadow:0 1px 3px rgba(0,0,0,.06);
+  --shadow-lift:0 4px 12px rgba(0,0,0,.08);
+  --ring:rgba(37,99,235,.2);
   --font-body:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
   --font-display:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
 }
 
-/* selector dibatasi ke <html> agar tombol pilihan tema (data-theme="dark") tidak ikut kena */
 html[data-theme="dark"]{
-  --bg:#0A0A0A;
-  --card:#161616;
-  --tile:#212121;
-  --line:#2A2A2A;
-  --line-strong:#3D3D3D;
-  --accent:#FAFAFA;
-  --accent-hover:#E0E0E0;
-  --on-accent:#171717;
-  --tx:#FAFAFA;
-  --tx-2:#A3A3A3;
-  --tx-3:#8A8A8A;
-  --green:#6EE7B0;
-  --red:#FF6B61;
-  --amber:#FFC46B;
-  --shadow:0 1px 2px rgba(0,0,0,.5);
-  --shadow-lift:0 3px 10px rgba(0,0,0,.6);
-  --ring:rgba(250,250,250,.16);
+  --bg:#0B1120;
+  --card:#131D31;
+  --tile:#1A2744;
+  --line:#223254;
+  --line-strong:#2D416B;
+  --navy:#131D31;
+  --navy-dark:#0B1120;
+  --accent:#3B82F6;
+  --accent-hover:#60A5FA;
+  --on-accent:#FFFFFF;
+  --tx:#F8FAFC;
+  --tx-2:#94A3B8;
+  --tx-3:#64748B;
+  --green:#34D399;
+  --red:#F87171;
+  --amber:#FBBF24;
+  --shadow:0 1px 3px rgba(0,0,0,.4);
+  --shadow-lift:0 4px 14px rgba(0,0,0,.5);
+  --ring:rgba(59,130,246,.25);
 }
 
 html{height:100%}
@@ -91,8 +93,12 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .primary-btn.small{height:37px;padding:0 15px;font-size:12.5px;border-radius:9px}
 .primary-btn.danger{background:#D92D20;color:#fff;border-color:#D92D20}
 .primary-btn.danger:hover{background:#B91C1C;border-color:#B91C1C}
+.primary-btn.navy{background:var(--navy);border-color:var(--navy);color:#fff}
+.primary-btn.navy:hover{background:var(--navy-dark);border-color:var(--navy-dark)}
 html[data-theme="dark"] .primary-btn{box-shadow:0 1px 2px rgba(0,0,0,.4)}
 html[data-theme="dark"] .primary-btn.danger{color:#fff;border-color:#D92D20}
+html[data-theme="dark"] .primary-btn.navy{background:var(--navy);border-color:var(--line);color:#fff}
+html[data-theme="dark"] .primary-btn.navy:hover{background:var(--navy-dark);border-color:var(--line-strong)}
 
 .secondary-btn{
   display:inline-flex;align-items:center;justify-content:center;gap:7px;
@@ -146,36 +152,36 @@ input:focus,select:focus,textarea:focus{
 }
 input[type="file"]{height:auto;padding:10px 12px;font-size:12.5px;border-style:dashed}
 
-/* ---------------- Layar splash ---------------- */
+/* ---------------- Layar splash (navy sesuai Figma) ---------------- */
 .screen{position:fixed;inset:0;z-index:80;overflow:auto}
 .splash-screen{
-  background:var(--bg);
+  background:var(--navy);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;padding:24px;
 }
 .splash-logo{
   position:relative;z-index:1;
   width:86px;height:86px;border-radius:18px;
-  background:var(--card) url("./logo.png") center/62% no-repeat;
-  border:1px solid var(--line);
-  box-shadow:var(--shadow-lift);
+  background:#FFFFFF url("./logo.png") center/62% no-repeat;
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:0 8px 24px rgba(0,0,0,.28);
   margin-bottom:22px;
   animation:popIn .4s ease both;
 }
-.splash-screen h1{position:relative;z-index:1;font-size:32px;font-weight:800;color:var(--tx);letter-spacing:-.03em}
+.splash-screen h1{position:relative;z-index:1;font-size:32px;font-weight:800;color:#FFFFFF;letter-spacing:-.03em}
 .splash-screen p{
   position:relative;z-index:1;
   margin-top:10px;font-size:11px;font-weight:700;
-  letter-spacing:.24em;text-transform:uppercase;color:var(--tx-3);
+  letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.72);
 }
 .splash-screen small{
   position:relative;z-index:1;display:block;margin-top:7px;
   font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--tx-3);
+  color:rgba(255,255,255,.55);
 }
 .dots{position:relative;z-index:1;display:flex;gap:7px;margin-top:34px}
 .dots i{
-  width:8px;height:8px;border-radius:3px;background:var(--line-strong);
+  width:8px;height:8px;border-radius:3px;background:rgba(255,255,255,.45);
   animation:dotPulse 1.2s infinite ease-in-out;
 }
 .dots i:nth-child(2){animation-delay:.15s}
@@ -195,9 +201,9 @@ input[type="file"]{height:auto;padding:10px 12px;font-size:12.5px;border-style:d
   to{opacity:1;transform:translateY(0)}
 }
 
-/* ---------------- Layar auth ---------------- */
+/* ---------------- Layar auth (navy sesuai Figma) ---------------- */
 .auth-screen{
-  background:var(--bg);
+  background:var(--navy);
   display:grid;align-items:center;
   grid-template-columns:minmax(0,1fr);
   gap:24px;
@@ -206,16 +212,16 @@ input[type="file"]{height:auto;padding:10px 12px;font-size:12.5px;border-style:d
 .sr-tab{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .auth-brand{position:relative;max-width:460px;margin:0 auto;text-align:center}
 .auth-brand>*{position:relative;z-index:1}
-.auth-brand h1{font-size:44px;font-weight:800;color:var(--tx);letter-spacing:-.035em;line-height:1}
-.auth-brand p{margin-top:10px;font-size:14.5px;font-weight:600;color:var(--tx-2)}
+.auth-brand h1{font-size:44px;font-weight:800;color:#FFFFFF;letter-spacing:-.035em;line-height:1}
+.auth-brand p{margin-top:10px;font-size:14.5px;font-weight:600;color:rgba(255,255,255,.78)}
 .auth-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:18px}
 .auth-chips span{
   display:inline-flex;align-items:center;gap:6px;
   padding:7px 13px;border-radius:999px;
-  background:var(--card);border:1px solid var(--line);
-  color:var(--tx-2);font-size:11.5px;font-weight:700;letter-spacing:.02em;
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);
+  color:rgba(255,255,255,.9);font-size:11.5px;font-weight:700;letter-spacing:.02em;
 }
-.auth-chips span::before{content:"";width:6px;height:6px;border-radius:2px;background:var(--accent)}
+.auth-chips span::before{content:"";width:6px;height:6px;border-radius:2px;background:#60A5FA}
 
 .auth-card{
   position:relative;
@@ -258,11 +264,11 @@ input[type="file"]{height:auto;padding:10px 12px;font-size:12.5px;border-style:d
   box-shadow:var(--shadow);transition:background .15s,border-color .15s;
 }
 .google-btn:hover{background:var(--tile);border-color:var(--tx-3)}
-.switch-text{display:none;max-width:452px;margin:0 auto;text-align:center;font-size:12.5px;color:var(--tx-2);font-weight:600}
+.switch-text{display:none;max-width:452px;margin:0 auto;text-align:center;font-size:12.5px;color:rgba(255,255,255,.8);font-weight:600}
 #tab-login:checked ~ #loginSwitch,
 #tab-register:checked ~ #registerSwitch{display:block}
-.link-label{display:inline;color:var(--tx);font-weight:800;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.link-label:hover{color:var(--tx-3)}
+.link-label{display:inline;color:#93C5FD;font-weight:800;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.link-label:hover{color:#FFFFFF}
 
 @media (min-width:900px){
   .auth-screen{
@@ -430,10 +436,10 @@ input[type="file"]{height:auto;padding:10px 12px;font-size:12.5px;border-style:d
   padding:17px;box-shadow:var(--shadow);margin-bottom:17px;
 }
 .panel.navy{
-  background:#0F172A;border-color:#0F172A;color:#fff;
+  background:var(--navy);border-color:var(--navy);color:#fff;
   box-shadow:0 1px 3px rgba(0,0,0,.2);
 }
-html[data-theme="dark"] .panel.navy{background:#0D0D0D;border-color:#2A2A2A}
+html[data-theme="dark"] .panel.navy{background:var(--navy);border-color:var(--line)}
 .dashboard-grid{display:grid;grid-template-columns:1fr;gap:15px;align-items:start}
 .dashboard-grid>.panel{margin-bottom:0}
 .panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
@@ -661,15 +667,15 @@ html[data-theme="dark"] .theme-option.active{background:var(--accent);color:var(
     display:flex;position:fixed;left:12px;right:12px;z-index:9;
     bottom:calc(12px + env(safe-area-inset-bottom,0px));
     justify-content:space-around;padding:8px 6px;
-    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    background:var(--navy);border:1px solid var(--navy);border-radius:16px;
     box-shadow:0 6px 20px rgba(0,0,0,.14);
   }
   .bottom-nav .nav-item{
     flex:1;flex-direction:column;gap:5px;align-items:center;
-    padding:5px 6px;border-radius:10px;color:var(--tx-2);
+    padding:5px 6px;border-radius:10px;color:rgba(255,255,255,.72);
     border:1px solid transparent;
   }
-  .bottom-nav .nav-item:hover{background:var(--tile);color:var(--tx)}
+  .bottom-nav .nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
   .bottom-nav .nav-item span{font-size:9.5px;font-weight:800;letter-spacing:.03em}
   .bottom-nav .nav-item .ic{width:20px;height:20px}
   .bottom-nav .nav-item.active{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}

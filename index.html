@@ -155,6 +155,7 @@
         <button class="nav-item" data-page="products"><svg class="ic"><use href="#i-package"/></svg> <span>Barang</span></button>
         <button class="nav-item" data-page="transactions"><svg class="ic"><use href="#i-arrow-left-right"/></svg> <span>Transaksi</span></button>
         <button class="nav-item" data-page="settings"><svg class="ic"><use href="#i-settings"/></svg> <span>Pengaturan</span></button>
+        <button class="nav-item" data-page="help"><svg class="ic"><use href="#i-info"/></svg> <span>Bantuan</span></button>
       </nav>
       <div class="sheet-box">
         <b><svg class="ic"><use href="#i-file-spreadsheet"/></svg> Hubungkan Google Spreadsheet</b>
@@ -270,7 +271,7 @@
 
         <h4 class="settings-group-title">TAMPILAN &amp; ANTARMUKU</h4>
         <div class="panel settings-list">
-          <div class="setting-row" style="cursor:default;border-bottom:0"><span class="setting-icon"><svg class="ic"><use href="#i-palette"/></svg></span><div><b>Tema Tampilan</b><small>Pilih mode Terang, Gelap, atau ikuti sistem perangkat</small></div></div>
+          <div class="setting-row" style="cursor:default;border-bottom:0"><span class="setting-icon"><svg class="ic"><use href="#i-palette"/></svg></span><div><b>Tema Tampilan</b></div></div>
           <div class="theme-switch">
             <button type="button" class="theme-option" data-theme="light"><svg class="ic"><use href="#i-sun"/></svg> Terang</button>
             <button type="button" class="theme-option" data-theme="dark"><svg class="ic"><use href="#i-moon"/></svg> Gelap</button>
@@ -282,22 +283,24 @@
         <div class="panel settings-list">
           <div class="setting-row" id="profileRow"><span class="setting-icon"><svg class="ic"><use href="#i-user"/></svg></span><div><b id="profileName">Admin</b><small id="profileEmail">-</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
           <div class="setting-row" id="sheetSettingRow"><span class="setting-icon"><svg class="ic"><use href="#i-file-spreadsheet"/></svg></span><div><b>Google Spreadsheet</b><small id="settingsSheetStatus">Belum terhubung</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
-          <div class="setting-row" data-goto="set-sheet"><span class="setting-icon"><svg class="ic"><use href="#i-upload"/></svg></span><div><b>Kirim ke Spreadsheet</b><small>Kirim barang &amp; transaksi, langsung tertata rapi</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
-          <div class="setting-row" style="cursor:default"><span class="setting-icon"><svg class="ic"><use href="#i-barcode"/></svg></span><div><b>Format Kode Barang</b><small>Awalan kode otomatis (BRG → BRG001). Kosong = ikuti kode lama</small></div><input id="kodeFormat" type="text" maxlength="20" placeholder="BRG" spellcheck="false" autocomplete="off"></div>
-          <div class="setting-row" style="cursor:default"><span class="setting-icon"><svg class="ic"><use href="#i-trending-down"/></svg></span><div><b>Batas Stok Menipis</b><small>Tandai barang "Menipis" jika stok ≤ nilai ini</small></div><input id="lowStockThreshold" type="number" min="1" step="1"></div>
+          <div class="setting-row" data-goto="set-sheet"><span class="setting-icon"><svg class="ic"><use href="#i-upload"/></svg></span><div><b>Kirim ke Spreadsheet</b></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
+          <div class="setting-row" style="cursor:default"><span class="setting-icon"><svg class="ic"><use href="#i-barcode"/></svg></span><div><b>Format Kode Barang</b></div><input id="kodeFormat" type="text" maxlength="20" placeholder="BRG" spellcheck="false" autocomplete="off"></div>
+          <div class="setting-row" style="cursor:default"><span class="setting-icon"><svg class="ic"><use href="#i-trending-down"/></svg></span><div><b>Batas Stok Menipis</b></div><input id="lowStockThreshold" type="number" min="1" step="1"></div>
         </div>
 
         <h4 class="settings-group-title">KEAMANAN &amp; DATA</h4>
         <div class="panel settings-list">
-          <div class="setting-row" id="passwordRow"><span class="setting-icon"><svg class="ic"><use href="#i-lock"/></svg></span><div><b>Kata Sandi Masuk</b><small>Perbarui kata sandi akun Anda</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
+          <div class="setting-row" id="passwordRow"><span class="setting-icon"><svg class="ic"><use href="#i-lock"/></svg></span><div><b>Kata Sandi Masuk</b></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
 
-          <div class="setting-row" data-goto="set-data"><span class="setting-icon"><svg class="ic"><use href="#i-database"/></svg></span><div><b>Data &amp; Cadangan</b><small>Ekspor atau pulihkan cadangan data (JSON)</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
+          <div class="setting-row" data-goto="set-data"><span class="setting-icon"><svg class="ic"><use href="#i-database"/></svg></span><div><b>Data &amp; Cadangan</b></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
 
-          <div class="setting-row" data-goto="set-storage"><span class="setting-icon"><svg class="ic"><use href="#i-layers"/></svg></span><div><b>Manajemen Penyimpanan</b><small>Cek dan bersihkan penyimpanan aplikasi</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
+          <div class="setting-row" data-goto="set-storage"><span class="setting-icon"><svg class="ic"><use href="#i-layers"/></svg></span><div><b>Manajemen Penyimpanan</b></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
 
-          <div class="setting-row" data-goto="set-about"><span class="setting-icon"><svg class="ic"><use href="#i-info"/></svg></span><div><b>Tentang Aplikasi &amp; S&amp;K</b><small>Stokita v1.0 · Sistem Inventaris Barang</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
+          <div class="setting-row" data-goto="set-about"><span class="setting-icon"><svg class="ic"><use href="#i-info"/></svg></span><div><b>Tentang Aplikasi &amp; S&amp;K</b></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
 
-          <div class="setting-row danger" id="resetRow"><span class="setting-icon"><svg class="ic"><use href="#i-rotate-ccw"/></svg></span><div><b>Reset Pabrik</b><small>Hapus semua data &amp; kembalikan ke kondisi awal</small></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
+          <div class="setting-row" data-goto="set-help"><span class="setting-icon"><svg class="ic"><use href="#i-info"/></svg></span><div><b>Bantuan &amp; Panduan</b></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
+
+          <div class="setting-row danger" id="resetRow"><span class="setting-icon"><svg class="ic"><use href="#i-rotate-ccw"/></svg></span><div><b>Reset Pabrik</b></div><svg class="ic"><use href="#i-chevron-right"/></svg></div>
 
           <div class="setting-row danger" id="logoutBtn"><span class="setting-icon"><svg class="ic"><use href="#i-log-out"/></svg></span><div><b>Keluar</b></div></div>
         </div>
@@ -408,10 +411,46 @@
           </details>
         </div>
       </div>
+      <div id="page-set-help" class="page hidden">
+        <div class="subpage-head">
+          <button class="back-btn" data-back aria-label="Kembali ke Pengaturan"><svg class="ic"><use href="#i-arrow-left"/></svg></button>
+          <div><h2>Bantuan &amp; Panduan</h2><p>Penjelasan lengkap setiap fitur dan pengaturan.</p></div>
+        </div>
+        <div class="panel subpage-panel">
+          <details class="terms" open>
+            <summary>Tema Tampilan</summary>
+            <p>Pilih mode Terang (Light), Gelap (Dark), atau sesuaikan otomatis dengan pengaturan sistem perangkat Anda agar nyaman di mata.</p>
+          </details>
+          <details class="terms">
+            <summary>Google Spreadsheet</summary>
+            <p>Hubungkan sistem ke Google Spreadsheet Anda untuk sinkronisasi data inventaris (impor data atau kirim data transaksi). Memerlukan URL Web App Google Apps Script yang dikonfigurasi melalui repositori proyek.</p>
+          </details>
+          <details class="terms">
+            <summary>Format Kode Barang</summary>
+            <p>Tentukan awalan (prefix) otomatis untuk kode barang Anda (contoh: BRG menjadi BRG001, BRG002, dst). Jika dikosongkan, sistem akan mempertahankan kode barang yang sudah ada.</p>
+          </details>
+          <details class="terms">
+            <summary>Batas Stok Menipis</summary>
+            <p>Atur batas minimum jumlah stok. Jika jumlah stok barang sama atau kurang dari nilai ini, barang akan otomatis ditandai dengan label "Menipis" untuk memudahkan pemantauan restok.</p>
+          </details>
+          <details class="terms">
+            <summary>Data & Cadangan</summary>
+            <p>Ekspor seluruh data inventaris dan transaksi ke file JSON untuk cadangan pribadi. Fitur Impor memungkinkan Anda memulihkan data dari cadangan tersebut ke perangkat apa pun.</p>
+          </details>
+          <details class="terms">
+            <summary>Manajemen Penyimpanan</summary>
+            <p>Pantau penggunaan penyimpanan lokal dan bersihkan cache aplikasi jika aplikasi terasa lambat atau ada data yang tidak sinkron.</p>
+          </details>
+        </div>
+      </div>
     </main>
 
-    <!-- BOTTOM NAV (mobile) -->
-    <!-- Removed: <nav class="bottom-nav" id="bottomNav" aria-label="Menu navigasi bawah">...</nav> -->
+    <!-- BOTTOM NAV (mobile) — sesuai Figma: Beranda, Barang, Transaksi -->
+    <nav class="bottom-nav" id="bottomNav" aria-label="Menu navigasi bawah">
+      <button class="nav-item active" data-page="dashboard"><svg class="ic"><use href="#i-layout-dashboard"/></svg><span>Beranda</span></button>
+      <button class="nav-item" data-page="products"><svg class="ic"><use href="#i-package"/></svg><span>Barang</span></button>
+      <button class="nav-item" data-page="transactions"><svg class="ic"><use href="#i-arrow-left-right"/></svg><span>Transaksi</span></button>
+    </nav>
   </section>
 
   <!-- PRODUCT MODAL -->
